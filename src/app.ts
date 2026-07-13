@@ -1,1 +1,3 @@
-// Parei depois de configurar o ESlint
+import fastify from 'fastify'
+
+export const app = fastify()
