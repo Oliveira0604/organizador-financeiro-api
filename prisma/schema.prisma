@@ -11,3 +11,60 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+
+  incomes    Income[]
+  expenses   Expense[]
+  categories Category[]
+
+  @@map("users")
+}
+
+model Income {
+  id          String   @id @default(uuid())
+  title       String
+  amount      Decimal
+  received_at DateTime @default(now())
+  category_id String
+  user_id     String
+
+  user     User     @relation(fields: [user_id], references: [id])
+  category Category @relation(fields: [category_id], references: [id])
+
+  @@map("incomes")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  title       String
+  amount      Decimal
+  paid_at     DateTime @default(now())
+  category_id String
+  user_id     String
+
+  user     User     @relation(fields: [user_id], references: [id])
+  category Category @relation(fields: [category_id], references: [id])
+
+  @@map("expenses")
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  user_id String
+
+  user User @relation(fields: [user_id], references: [id])
+
+  expenses Expense[]
+  incomes  Income[]
+
+  @@map("categories")
+}
