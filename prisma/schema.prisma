@@ -13,12 +13,12 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  name          String
-  email         String   @unique
-  password_hash String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   incomes    Income[]
   expenses   Expense[]
@@ -28,29 +28,29 @@ model User {
 }
 
 model Income {
-  id          String   @id @default(uuid())
-  title       String
-  amount      Decimal
-  received_at DateTime @default(now())
-  category_id String
-  user_id     String
+  id         String   @id @default(uuid())
+  title      String
+  amount     Decimal
+  receivedAt DateTime @default(now())
+  categoryId String
+  userId     String
 
-  user     User     @relation(fields: [user_id], references: [id])
-  category Category @relation(fields: [category_id], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 
   @@map("incomes")
 }
 
 model Expense {
-  id          String   @id @default(uuid())
-  title       String
-  amount      Decimal
-  paid_at     DateTime @default(now())
-  category_id String
-  user_id     String
+  id         String   @id @default(uuid())
+  title      String
+  amount     Decimal
+  paidAt     DateTime @default(now())
+  categoryId String
+  userId     String
 
-  user     User     @relation(fields: [user_id], references: [id])
-  category Category @relation(fields: [category_id], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 
   @@map("expenses")
 }
@@ -59,13 +59,13 @@ model Category {
   id   String @id @default(uuid())
   name String
 
-  user_id String
+  userId String
 
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   expenses Expense[]
   incomes  Income[]
 
-  @@unique([user_id, name])
+  @@unique([userId, name])
   @@map("categories")
 }
