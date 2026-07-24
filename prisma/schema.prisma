@@ -13,12 +13,12 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id          String    @id @default(uuid())
+  name        String
+  phoneNumber String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 
   incomes    Income[]
   expenses   Expense[]
@@ -34,6 +34,7 @@ model Income {
   receivedAt DateTime @default(now())
   categoryId String
   userId     String
+  updatedAt  DateTime @updatedAt
 
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -48,6 +49,7 @@ model Expense {
   paidAt     DateTime @default(now())
   categoryId String
   userId     String
+  updatedAt  DateTime @updatedAt
 
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -56,8 +58,10 @@ model Expense {
 }
 
 model Category {
-  id   String @id @default(uuid())
-  name String
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userId String
 

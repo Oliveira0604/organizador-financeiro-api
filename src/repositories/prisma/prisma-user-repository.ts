@@ -21,14 +21,35 @@ export class PrismaUserRepository implements UserRepository {
         return user;
     }
 
-    async findByEmail(email: string) {
+    async findByPhoneNumber(phoneNumber: string) {
         const user = await prisma.user.findUnique({
             where: {
-                email,
+                phoneNumber,
             }
         });
 
         return user;
     }
 
+    async update(id: string, data: Prisma.UserUpdateInput) {
+        const user = await prisma.user.update({
+            where: {
+                id,
+            },
+            data
+        });
+
+        return user;
+    }
+
+    async delete(id: string) {
+        await prisma.user.update({
+            where: {
+                id,
+            },
+            data: {
+                deletedAt: new Date()
+            }
+        });
+    }
 }

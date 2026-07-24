@@ -1,7 +1,20 @@
-import type { Prisma, User } from "@/generated/prisma/client";
+import type { User } from "@/generated/prisma/client";
+
+export type CreateUserData = {
+    name: string,
+    phoneNumber: string,
+    deletedAt?: Date
+}
+
+export type UpdateUserData = {
+    name?: string,
+    phoneNumber?: string,
+}
 
 export interface UserRepository {
-    create(data: Prisma.UserCreateInput): Promise<User>
+    create(data: CreateUserData): Promise<User>
     findById(id: string): Promise<User | null>
-    findByEmail(email: string): Promise<User | null>
+    findByPhoneNumber(email: string): Promise<User | null>
+    update(id: string, data: UpdateUserData): Promise<User>
+    delete(id: string): Promise<void>
 }
