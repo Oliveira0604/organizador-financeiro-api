@@ -20,6 +20,6 @@ export interface IncomeRepository {
     findById(id: string): Promise<Income | null>
     findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date): Promise<Income[]>
     getTotalByCategory(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Decimal>
-    update(userId: string, id: string, data: UpdateIncomeData): Promise<Income>
-    delete(userId: string, id: string): Promise<void>
+    update(id: string, data: UpdateIncomeData): Promise<Income>
+    delete(id: string): Promise<void>
 }

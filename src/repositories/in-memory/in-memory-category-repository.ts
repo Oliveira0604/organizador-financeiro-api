@@ -23,21 +23,17 @@ export class InMemoryCategoryRepository implements CategoryRepository {
         const category = this.items.find((item) => item.id === id);
 
         if (!category) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         return category;
     }
 
-    async update(userId: string, id: string, data: UpdateCategoryData) {
+    async update(id: string, data: UpdateCategoryData) {
         const category = this.items.find((item) => item.id === id);
 
         if (!category) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (category.userId !== userId) {
-            throw new NotAllowedError();
+            return null;
         }
 
         Object.assign(category, data);
@@ -45,16 +41,8 @@ export class InMemoryCategoryRepository implements CategoryRepository {
         return category;
     }
 
-    async delete(userId: string, id: string) {
+    async delete(id: string) {
         const categoryIndex = this.items.findIndex((item) => item.id === id);
-
-        if (categoryIndex === -1) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (this.items[categoryIndex]!.userId !== userId) {
-            throw new NotAllowedError();
-        }
 
         this.items.splice(categoryIndex, 1);
     }

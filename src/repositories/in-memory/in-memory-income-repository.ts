@@ -1,5 +1,6 @@
 import type { Income } from "@/generated/prisma/client";
 import type { CreateIncomeData, IncomeRepository, UpdateIncomeData } from "../income-repository";
+import { ResourceNotFoundError } from "@/use-cases/errors/resource-not-found-error";
 import { randomUUID } from "node:crypto";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
@@ -67,5 +68,13 @@ export class InMemoryIncomeRepository implements IncomeRepository {
         Object.assign(income, data);
 
         return income;
+    }
+
+    async delete(userId: string, id: string) {
+        const incomeIndex = this.items.findIndex((item) => item.id === id);
+
+        if (this.items[incomeIndex]?.userId !== userId) {
+            throw new NotAllowedError();
+        }
     }
 }

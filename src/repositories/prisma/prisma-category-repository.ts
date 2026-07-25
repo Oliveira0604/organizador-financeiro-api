@@ -1,12 +1,20 @@
 
 import type { Prisma } from "@/generated/prisma/client";
-import type { CategoryRepository } from "../category-repository";
+import type { CategoryRepository, CreateCategoryData } from "../category-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaCategoryRepository implements CategoryRepository {
-    async create(data: Prisma.CategoryCreateInput) {
+    async create(data: CreateCategoryData) {
         const category = await prisma.category.create({
-            data,
+            data: {
+                name: data.name,
+
+                user: {
+                    connect: {
+                        id: data.userId
+                    }
+                }
+            }
         });
 
         return category;
@@ -22,10 +30,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
         return category;
     }
 
-    async update(userId: string, id: string, data: Prisma.CategoryUpdateInput) {
+    async update(id: string, data: Prisma.CategoryUpdateInput) {
         const category = await prisma.category.update({
             where: {
-                userId,
                 id
             },
             data
@@ -35,10 +42,9 @@ export class PrismaCategoryRepository implements CategoryRepository {
 
     }
 
-    async delete(userId: string, id: string) {
+    async delete(id: string) {
         await prisma.category.delete({
             where: {
-                userId,
                 id,
             }
         });

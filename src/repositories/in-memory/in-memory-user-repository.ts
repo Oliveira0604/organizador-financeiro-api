@@ -24,7 +24,7 @@ export class InMemoryUserRepository implements UserRepository {
         const user = this.items.find((item) => item.id === id);
 
         if (!user) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         return user;
@@ -34,7 +34,7 @@ export class InMemoryUserRepository implements UserRepository {
         const user = this.items.find((item) => item.phoneNumber === phoneNumber);
 
         if (!user) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         return user;
@@ -44,7 +44,7 @@ export class InMemoryUserRepository implements UserRepository {
         const user = this.items.find((item) => item.id === id);
 
         if (!user) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         Object.assign(user, data);
@@ -54,10 +54,6 @@ export class InMemoryUserRepository implements UserRepository {
 
     async delete(id: string) {
         const userIndex = this.items.findIndex((item) => item.id === id);
-
-        if (!userIndex) {
-            throw new ResourceNotFoundError();
-        }
 
         this.items.splice(userIndex, 1);
     }

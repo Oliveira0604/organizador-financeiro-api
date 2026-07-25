@@ -1,9 +1,8 @@
-import type { Prisma } from "@/generated/prisma/client";
-import type { UserRepository } from "../user-repository";
+import type { CreateUserData, UpdateUserData, UserRepository } from "../user-repository";
 import { prisma } from "@/lib/prisma";
 
 export class PrismaUserRepository implements UserRepository {
-    async create(data: Prisma.UserCreateInput) {
+    async create(data: CreateUserData) {
         const user = await prisma.user.create({
             data,
         });
@@ -31,7 +30,7 @@ export class PrismaUserRepository implements UserRepository {
         return user;
     }
 
-    async update(id: string, data: Prisma.UserUpdateInput) {
+    async update(id: string, data: UpdateUserData) {
         const user = await prisma.user.update({
             where: {
                 id,

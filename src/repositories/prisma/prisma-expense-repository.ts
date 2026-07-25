@@ -1,12 +1,27 @@
-import type { Prisma } from "@/generated/prisma/client";
-import type { ExpenseRepository } from "../expense-repository";
+import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { prisma } from "@/lib/prisma";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class PrismaExpenseRepository implements ExpenseRepository {
-    async create(data: Prisma.ExpenseCreateInput) {
+    async create(data: CreateExpenseData) {
         const expense = await prisma.expense.create({
-            data,
+            data: {
+                title: data.title,
+                amount: data.amount,
+                paidAt: data.paidAt,
+
+                user: {
+                    connect: {
+                        id: data.userId
+                    }
+                },
+
+                category: {
+                    connect: {
+                        id: data.categoryId
+                    }
+                }
+            }
         });
 
         return expense;
@@ -22,7 +37,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
-    async findManyByUserIdAndDate(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
         const dateExpenses = await prisma.expense.findMany({
             where: {
                 userId,
@@ -54,21 +69,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return totalExpense._sum.amount ?? new Decimal(0);
     }
 
-    async update(userId: string, id: string, data: Prisma.ExpenseUpdateInput) {
-        const expense = await prisma.expense.findUnique({
-            where: {
-                id,
-            }
-        });
-
-        if (!expense) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (expense.userId !== userId) {
-            throw new NotAllowedError();
-        }
-
+    async update(id: string, data: UpdateExpenseData) {
         const updatedExpense = await prisma.expense.update({
             where: {
                 id,
@@ -80,22 +81,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
 
     }
 
-    async delete(userId: string, id: string) {
-        const expense = await prisma.expense.findUnique({
-            where: {
-                id,
-            }
-        });
-
-        if (!expense) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (expense.userId !== userId) {
-            throw new NotAllowedError();
-        }
-
-
+    async delete(id: string) {
         await prisma.expense.delete({
             where: {
                 id,

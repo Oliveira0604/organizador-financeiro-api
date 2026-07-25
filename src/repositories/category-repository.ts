@@ -14,6 +14,6 @@ export type UpdateCategoryData = {
 export interface CategoryRepository {
     create(data: CreateCategoryData): Promise<Category>
     findById(id: string): Promise<Category | null>
-    update(userId: string, id: string, data: UpdateCategoryData): Promise<Category>
-    delete(userId: string, id: string): Promise<void>
+    update(id: string, data: UpdateCategoryData): Promise<Category | null>
+    delete(id: string): Promise<void>
 }

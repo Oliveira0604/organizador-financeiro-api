@@ -26,7 +26,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         const expense = this.items.find((item) => item.id === id);
 
         if (!expense) {
-            throw new ResourceNotFoundError();
+            return null;
         }
 
         return expense;
@@ -54,15 +54,11 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         return totalExpense;
     }
 
-    async update(userId: string, id: string, data: UpdateExpenseData) {
+    async update(id: string, data: UpdateExpenseData) {
         const expense = this.items.find((item) => item.id === id);
 
         if (!expense) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (expense.userId !== userId) {
-            throw NotAllowedError();
+            return null;
         }
 
         Object.assign(expense, data);
@@ -70,16 +66,8 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
-    async delete(userId: string, id: string) {
+    async delete(id: string) {
         const expenseIndex = this.items.findIndex((items) => items.id === id);
-
-        if (expenseIndex === -1) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (this.items[expenseIndex]!.userId !== userId) {
-            throw new NotAllowedError();
-        }
 
         this.items.splice(expenseIndex, 1);
     }

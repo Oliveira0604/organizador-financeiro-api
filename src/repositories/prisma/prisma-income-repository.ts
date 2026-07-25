@@ -1,12 +1,28 @@
-import type { Prisma } from "@/generated/prisma/client";
-import type { IncomeRepository } from "../income-repository";
+import type { CreateIncomeData, IncomeRepository, UpdateIncomeData } from "../income-repository";
 import { prisma } from "@/lib/prisma";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class PrismaIncomeRepository implements IncomeRepository {
-    async create(data: Prisma.IncomeCreateInput) {
+    async create(data: CreateIncomeData) {
         const income = await prisma.income.create({
-            data,
+            data: {
+                title: data.title,
+                amount: data.amount,
+                receivedAt: data.receivedAt,
+                updatedAt: data.updatedAt,
+
+                user: {
+                    connect: {
+                        id: data.userId
+                    },
+                },
+
+                category: {
+                    connect: {
+                        id: data.categoryId
+                    }
+                }
+            },
         });
 
         return income;
@@ -22,7 +38,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async findManyByUserIdAndDate(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
         const incomes = await prisma.income.findMany({
             where: {
                 userId,
@@ -40,24 +56,12 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return incomes;
     }
 
-    async getTotalByCategory(userId: string, category: string, startDate: Date, endDate: Date) {
-        const doesTheCategoryExist = await prisma.category.findUnique({
-            where: {
-                userId_name: {
-                    userId,
-                    name: category,
-                }
-            }
-        });
-
-        if (!doesTheCategoryExist) {
-            throw new ResourceNotFoundError();
-        }
+    async getTotalByCategory(userId: string, categoryId: string, startDate: Date, endDate: Date) {
 
         const totalIncome = await prisma.income.aggregate({
             where: {
                 userId,
-                categoryId: doesTheCategoryExist.id,
+                categoryId,
                 receivedAt: {
                     gte: startDate,
                     lt: endDate
@@ -71,23 +75,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return totalIncome._sum.amount ?? new Decimal(0);
     }
 
-    async update(userId: string, id: string, data: Prisma.IncomeUpdateInput) {
-
-        const category = await prisma.income.findUnique({
-            where: {
-                id,
-            }
-        });
-
-        if (!category) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (category.userId !== userId) {
-            throw new NotAllowedError();
-        }
-
-
+    async update(id: string, data: UpdateIncomeData) {
         const income = await prisma.income.update({
             where: {
                 id
@@ -98,21 +86,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async delete(userId: string, id: string) {
-        const income = await prisma.income.findUnique({
-            where: {
-                id,
-            }
-        });
-
-        if (!income) {
-            throw new ResourceNotFoundError();
-        }
-
-        if (income.userId !== userId) {
-            throw new NotAllowedError();
-        }
-
+    async delete(id: string) {
         await prisma.income.delete({
             where: {
                 id,
