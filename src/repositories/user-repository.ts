@@ -1,5 +1,3 @@
-import type { User } from "@/generated/prisma/client";
-
 export type CreateUserData = {
     name: string,
     phoneNumber: string,
@@ -9,6 +7,15 @@ export type CreateUserData = {
 export type UpdateUserData = {
     name?: string,
     phoneNumber?: string,
+}
+
+export type User = {
+    id: string,
+    name: string,
+    phoneNumber: string,
+    createdAt: Date,
+    updatedAt: Date,
+    deletedAt: null
 }
 
 export interface UserRepository {
