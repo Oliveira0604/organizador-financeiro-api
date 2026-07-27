@@ -1,4 +1,5 @@
 import type { User, UserRepository } from "@/repositories/user-repository";
+import { UserAlreadyExistsError } from "@/errors/user-already-exists-error";
 
 interface CreateUserUseCaseRequest {
     name: string,
