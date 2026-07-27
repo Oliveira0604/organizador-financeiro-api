@@ -15,7 +15,7 @@ export type User = {
     phoneNumber: string,
     createdAt: Date,
     updatedAt: Date,
-    deletedAt: null
+    deletedAt: Date | null
 }
 
 export interface UserRepository {
