@@ -13,9 +13,7 @@ interface UpdateUserUseCaseResponse {
 
 
 export class UpdateUserUseCase {
-    constructor(
-        private userRepository: UserRepository
-    ) { }
+    constructor(private userRepository: UserRepository) { }
 
     async execute({
         userId,
