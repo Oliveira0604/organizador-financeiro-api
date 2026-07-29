@@ -1,7 +1,8 @@
 An app to organize finance
 
 ## RFs 
-- [ ] O sistema deve ser capaz de cadastrar um usuário
+- [ x ] O sistema deve ser capaz de cadastrar um usuário
+- [ x ] O sistema deve ser capaz de atualizar dados de um usuário
 - [ ] O sistema deve ser capaz de autenticar um usuário
 - [ ] O sistema deve ser capaz de cadastrar a renda mensal
 - [ ] O sistema deve ser capaz de atualizar a renda mensal
