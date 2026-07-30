@@ -3,6 +3,7 @@ An app to organize finance
 ## RFs 
 - [ x ] O sistema deve ser capaz de cadastrar um usuário
 - [ x ] O sistema deve ser capaz de atualizar dados de um usuário
+- [ x ] O sistema deve ser capaz de deletar um usuário
 - [ ] O sistema deve ser capaz de autenticar um usuário
 - [ ] O sistema deve ser capaz de cadastrar a renda mensal
 - [ ] O sistema deve ser capaz de atualizar a renda mensal
@@ -21,7 +22,7 @@ An app to organize finance
 - [ ] O sistema deve ser capaz de mostrar um resumo financeiro mensal.
 
 ## RNs
-- [ ] O usuário não pode se cadastrar com um email já existente
+- [ x ] O usuário não pode se cadastrar com um número já existente
 - [ ] O usuário não pode cadastrar uma renda negativa
 - [ ] O usuário não deve ser capaz de cadastrar uma despesa com valor negativo
 - [ ] O usuário não deve ser capaz de definir um limite de gasto negativo

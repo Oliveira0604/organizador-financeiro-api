@@ -1,6 +1,6 @@
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { expect, describe, it, beforeEach } from "vitest";
-import { CreateUserUseCase } from "./create-user";
+import { CreateUserUseCase } from "./create-user-use-case";
 import { UserAlreadyExistsError } from "@/errors/user-already-exists-error";
 
 let userRepository: InMemoryUserRepository;

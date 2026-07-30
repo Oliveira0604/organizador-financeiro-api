@@ -1,4 +1,3 @@
-import type { Expense } from "@/generated/prisma/client";
 import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export type CreateExpenseData = {
@@ -7,12 +6,21 @@ export type CreateExpenseData = {
     paidAt: Date,
     categoryId: string,
     userId: string,
-    updatedAt: Date
 }
 
 export type UpdateExpenseData = {
     title?: string,
     amount?: Decimal,
+}
+
+export type Expense = {
+    id: string
+    title: string,
+    amount: Decimal,
+    paidAt: Date,
+    categoryId: string,
+    userId: string,
+    updatedAt: Date | null
 }
 
 export interface ExpenseRepository {
