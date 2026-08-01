@@ -8,7 +8,7 @@ An app to organize finance
 - [ ] O sistema deve ser capaz de cadastrar a renda mensal
 - [ ] O sistema deve ser capaz de atualizar a renda mensal
 - [ ] O sistema deve ser capaz de acrescentar dinheiro extra à renda
-- [ ] O sistema deve ser capaz de cadastrar uma despesa
+- [ x ] O sistema deve ser capaz de cadastrar uma despesa
 - [ ] O sistema deve ser capaz de atualizar uma despesa
 - [ ] O sistema deve ser capaz de remover uma despesa
 - [ ] O sistema deve ser capaz de categorizar as despesas
