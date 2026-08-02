@@ -1,18 +1,18 @@
-import { describe, it, expect, beforeEach } from "vitest";
-import { GetTotalByCategoryIdUseCase } from "./get-total-by-category-id-use-case";
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
+import { beforeEach, describe, expect, it } from "vitest";
+import { FindManyByCategoryIdUseCase } from "./find-many-by-category-id-use-case";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 let expenseRepository: InMemoryExpenseRepository;
-let getTotalByCategoryIdUseCase: GetTotalByCategoryIdUseCase;
+let findManyByCategoryId: FindManyByCategoryIdUseCase;
 
-describe("Get Total By Category Id Use Case", () => {
+describe("Find Many By Category Id Use Case", () => {
     beforeEach(() => {
         expenseRepository = new InMemoryExpenseRepository();
-        getTotalByCategoryIdUseCase = new GetTotalByCategoryIdUseCase(expenseRepository);
+        findManyByCategoryId = new FindManyByCategoryIdUseCase(expenseRepository);
     });
 
-    it("should be able to get user total amount by category id", async () => {
+    it("should be able to get the category expenses", async () => {
         await expenseRepository.create({
             title: "supermarket",
             amount: new Decimal(100),
@@ -31,20 +31,10 @@ describe("Get Total By Category Id Use Case", () => {
             updatedAt: null
         });
 
-        await expenseRepository.create({
-            title: "bakery",
-            amount: new Decimal(6.79),
-            categoryId: "category-01",
-            paidAt: new Date(),
-            userId: "user-01",
-            updatedAt: null
-        });
-
-        const { total } = await getTotalByCategoryIdUseCase.execute({
-            userId: "user-01",
+        const { expenses } = await findManyByCategoryId.execute({
             categoryId: "category-01"
         });
 
-        expect(total).toEqual(new Decimal(306.79));
+        expect(expenses).toHaveLength(2);
     });
 });
