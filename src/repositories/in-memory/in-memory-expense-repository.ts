@@ -1,4 +1,4 @@
-import type { Expense } from "@/generated/prisma/client";
+import type { Expense } from "../expense-repository";
 import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { randomUUID } from "node:crypto";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
@@ -14,7 +14,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             paidAt: data.paidAt,
             categoryId: data.categoryId,
             userId: data.userId,
-            updatedAt: data.updatedAt
+            updatedAt: null
         };
 
         this.items.push(expense);
@@ -40,6 +40,14 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         );
 
         return expenses;
+    }
+
+    async findManyByCategoryId(categoryId: string) {
+        const exepenses = this.items.filter((item) =>
+            item.categoryId === categoryId
+        );
+
+        return exepenses;
     }
 
     async getTotalByCategory(userId: string, categoryId: string) {

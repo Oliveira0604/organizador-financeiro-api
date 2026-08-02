@@ -55,6 +55,16 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return dateExpenses;
     }
 
+    async findManyByCategoryId(categoryId: string) {
+        const expenses = await prisma.expense.findMany({
+            where: {
+                categoryId,
+            }
+        });
+
+        return expenses;
+    }
+
     async getTotalByCategory(userId: string, categoryId: string) {
         const totalExpense = await prisma.expense.aggregate({
             where: {
