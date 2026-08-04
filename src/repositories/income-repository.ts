@@ -7,7 +7,7 @@ export type CreateIncomeData = {
     receivedAt: Date,
     categoryId: string,
     userId: string,
-    updatedAt: Date
+    updatedAt: Date | null
 }
 
 export type UpdateIncomeData = {

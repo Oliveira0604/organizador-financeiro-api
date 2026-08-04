@@ -14,7 +14,7 @@ export type User = {
     name: string,
     phoneNumber: string,
     createdAt: Date,
-    updatedAt: Date,
+    updatedAt: Date | null,
     deletedAt: Date | null
 }
 

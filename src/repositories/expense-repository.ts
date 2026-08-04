@@ -12,6 +12,7 @@ export type CreateExpenseData = {
 export type UpdateExpenseData = {
     title?: string,
     amount?: Decimal,
+    categoryId?: string
 }
 
 export type Expense = {

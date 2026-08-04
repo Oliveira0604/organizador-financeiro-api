@@ -30,6 +30,19 @@ export class PrismaCategoryRepository implements CategoryRepository {
         return category;
     }
 
+    async findByName(userId: string, name: string) {
+        const category = await prisma.category.findUnique({
+            where: {
+                userId_name: {
+                    userId,
+                    name
+                }
+            }
+        });
+
+        return category;
+    }
+
     async update(id: string, data: Prisma.CategoryUpdateInput) {
         const category = await prisma.category.update({
             where: {

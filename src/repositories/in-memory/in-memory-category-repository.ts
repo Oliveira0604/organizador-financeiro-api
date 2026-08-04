@@ -1,4 +1,4 @@
-import type { Category } from "@/generated/prisma/client";
+import type { Category } from "../category-repository";
 import type { CategoryRepository, CreateCategoryData, UpdateCategoryData } from "../category-repository";
 import { randomUUID } from "node:crypto";
 
@@ -11,7 +11,7 @@ export class InMemoryCategoryRepository implements CategoryRepository {
             name: data.name,
             userId: data.userId,
             createdAt: data.createdAt,
-            updatedAt: data.updatedAt
+            updatedAt: null
         };
 
         this.items.push(category);
@@ -21,6 +21,16 @@ export class InMemoryCategoryRepository implements CategoryRepository {
 
     async findById(id: string) {
         const category = this.items.find((item) => item.id === id);
+
+        if (!category) {
+            return null;
+        }
+
+        return category;
+    }
+
+    async findByName(userId: string, name: string) {
+        const category = this.items.find((item) => item.name === name && item.userId === userId);
 
         if (!category) {
             return null;

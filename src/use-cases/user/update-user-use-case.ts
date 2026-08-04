@@ -8,7 +8,7 @@ interface UpdateUserUseCaseRequest {
 }
 
 interface UpdateUserUseCaseResponse {
-    user: User
+    user: User | null
 }
 
 
@@ -36,13 +36,13 @@ export class UpdateUserUseCase {
             data.phoneNumber = phoneNumber;
         }
 
-        await this.userRepository.update(
+        const updatedUser = await this.userRepository.update(
             user.id,
             data
         );
 
         return {
-            user
+            user: updatedUser
         };
     }
 }
