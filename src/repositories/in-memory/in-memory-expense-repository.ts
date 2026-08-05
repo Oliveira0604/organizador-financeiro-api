@@ -14,7 +14,8 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             paidAt: data.paidAt,
             categoryId: data.categoryId,
             userId: data.userId,
-            updatedAt: null
+            updatedAt: null,
+            deletedAt: null
         };
 
         this.items.push(expense);
@@ -75,8 +76,8 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     async delete(id: string) {
-        const expenseIndex = this.items.findIndex((items) => items.id === id);
+        const expense = this.items.find((items) => items.id === id);
 
-        this.items.splice(expenseIndex, 1);
+        expense!.deletedAt = new Date();
     }
 }

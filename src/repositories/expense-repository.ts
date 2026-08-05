@@ -7,6 +7,7 @@ export type CreateExpenseData = {
     categoryId: string,
     userId: string,
     updatedAt?: Date | null
+    deletedAt?: Date | null
 }
 
 export type UpdateExpenseData = {
@@ -23,6 +24,7 @@ export type Expense = {
     categoryId: string,
     userId: string,
     updatedAt: Date | null
+    deletedAt: Date | null
 }
 
 export interface ExpenseRepository {

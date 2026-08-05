@@ -28,13 +28,14 @@ model User {
 }
 
 model Income {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   title      String
   amount     Decimal
-  receivedAt DateTime @default(now())
+  receivedAt DateTime  @default(now())
   categoryId String
   userId     String
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -43,13 +44,14 @@ model Income {
 }
 
 model Expense {
-  id         String   @id @default(uuid())
+  id         String    @id @default(uuid())
   title      String
   amount     Decimal
-  paidAt     DateTime @default(now())
+  paidAt     DateTime  @default(now())
   categoryId String
   userId     String
-  updatedAt  DateTime @updatedAt
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
@@ -58,11 +60,12 @@ model Expense {
 }
 
 model Category {
-  id        String   @id @default(uuid())
+  id        String    @id @default(uuid())
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   userId    String
+  deletedAt DateTime?
 
   user User @relation(fields: [userId], references: [id])
 
