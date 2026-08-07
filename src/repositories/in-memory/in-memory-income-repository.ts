@@ -1,4 +1,4 @@
-import type { Income } from "@/generated/prisma/client";
+import type { Income } from "../income-repository";
 import type { CreateIncomeData, IncomeRepository, UpdateIncomeData } from "../income-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { randomUUID } from "node:crypto";
@@ -15,7 +15,8 @@ export class InMemoryIncomeRepository implements IncomeRepository {
             receivedAt: data.receivedAt,
             categoryId: data.categoryId,
             userId: data.userId,
-            updatedAt: data.updatedAt
+            updatedAt: null,
+            deletedAt: null
         };
 
         this.items.push(income);

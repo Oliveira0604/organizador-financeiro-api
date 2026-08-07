@@ -6,8 +6,6 @@ export type CreateExpenseData = {
     paidAt: Date,
     categoryId: string,
     userId: string,
-    updatedAt?: Date | null
-    deletedAt?: Date | null
 }
 
 export type UpdateExpenseData = {

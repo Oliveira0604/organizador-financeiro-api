@@ -1,4 +1,3 @@
-import type { Income } from "@/generated/prisma/client";
 import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export type CreateIncomeData = {
@@ -7,12 +6,22 @@ export type CreateIncomeData = {
     receivedAt: Date,
     categoryId: string,
     userId: string,
-    updatedAt: Date | null
 }
 
 export type UpdateIncomeData = {
     title?: string,
     amount?: string,
+}
+
+export type Income = {
+    id: string,
+    title: string,
+    amount: Decimal,
+    receivedAt: Date,
+    categoryId: string,
+    userId: string,
+    updatedAt: Date | null,
+    deletedAt: Date | null
 }
 
 export interface IncomeRepository {

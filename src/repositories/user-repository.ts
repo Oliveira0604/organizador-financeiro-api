@@ -1,7 +1,6 @@
 export type CreateUserData = {
     name: string,
     phoneNumber: string,
-    deletedAt?: Date
 }
 
 export type UpdateUserData = {

@@ -1,8 +1,6 @@
 export type CreateCategoryData = {
     name: string,
     userId: string,
-    createdAt: Date,
-    updatedAt: Date | null
 }
 
 export type UpdateCategoryData = {

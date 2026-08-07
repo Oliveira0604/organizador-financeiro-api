@@ -40,6 +40,9 @@ model Income {
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
 
+  @@index([userId, receivedAt])
+  @@index([userId, categoryId])
+  @@index([categoryId])
   @@map("incomes")
 }
 
@@ -56,6 +59,9 @@ model Expense {
   user     User     @relation(fields: [userId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
 
+  @@index([userId, paidAt])
+  @@index([userId, categoryId])
+  @@index([categoryId])
   @@map("expenses")
 }
 
