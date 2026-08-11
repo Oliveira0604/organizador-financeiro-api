@@ -3,7 +3,6 @@ import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 export type CreateExpenseData = {
     title: string,
     amount: Decimal,
-    paidAt: Date,
     categoryId: string,
     userId: string,
 }
@@ -30,6 +29,7 @@ export interface ExpenseRepository {
     findById(id: string): Promise<Expense | null>
     findManyByCategoryId(categoryId: string): Promise<Expense[]>
     findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date): Promise<Expense[]>
+    getTotal(userId: string): Promise<Decimal>
     getTotalByCategory(userId: string, categoryId: string): Promise<Decimal>
     update(id: string, data: UpdateExpenseData): Promise<Expense | null>
     delete(id: string): Promise<void>

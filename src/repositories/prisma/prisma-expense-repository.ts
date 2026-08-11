@@ -66,7 +66,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
     }
 
     async getTotalByCategory(userId: string, categoryId: string) {
-        const totalExpense = await prisma.expense.aggregate({
+        const totalByCategory = await prisma.expense.aggregate({
             where: {
                 userId,
                 categoryId
@@ -74,6 +74,20 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             _sum: {
                 amount: true
             }
+        });
+
+        return totalByCategory._sum.amount ?? new Decimal(0);
+    }
+
+    async getTotal(userId: string) {
+        const totalExpense = await prisma.expense.aggregate({
+            where: {
+                userId
+            },
+            _sum: {
+                amount: true
+            }
+
         });
 
         return totalExpense._sum.amount ?? new Decimal(0);

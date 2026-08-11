@@ -9,10 +9,10 @@ An app to organize finance
 - [ ] O sistema deve ser capaz de atualizar a renda mensal
 - [ ] O sistema deve ser capaz de acrescentar dinheiro extra à renda
 - [ x ] O sistema deve ser capaz de cadastrar uma despesa
-- [ ] O sistema deve ser capaz de atualizar uma despesa
-- [ ] O sistema deve ser capaz de remover uma despesa
-- [ ] O sistema deve ser capaz de categorizar as despesas
-- [ ] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
+- [ x ] O sistema deve ser capaz de atualizar uma despesa
+- [ x ] O sistema deve ser capaz de remover uma despesa
+- [ x ] O sistema deve ser capaz de categorizar as despesas
+- [ x ] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
 - [ ] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
 - [ ] O sistema deve ser capaz de definir limite de gastos para cada área de acordo com o usuário
 - [ ] O sistema deve ser capaz de dar dicas de economia

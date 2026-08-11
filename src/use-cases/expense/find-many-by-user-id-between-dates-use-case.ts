@@ -1,4 +1,6 @@
+import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Expense, ExpenseRepository } from "@/repositories/expense-repository";
+import type { UserRepository } from "@/repositories/user-repository";
 
 
 interface FindManyByUserIdBetweenDatesUseCaseRequest {
@@ -12,13 +14,22 @@ interface FindManyByUserIdBetweenDatesUseCaseResponse {
 }
 
 export class FindManyByUserIdBetweenDatesUseCase {
-    constructor(private expenseRepository: ExpenseRepository) { }
+    constructor(
+        private expenseRepository: ExpenseRepository,
+        private userRepository: UserRepository
+    ) { }
 
     async execute({
         userId,
         startDate,
         endDate
     }: FindManyByUserIdBetweenDatesUseCaseRequest): Promise<FindManyByUserIdBetweenDatesUseCaseResponse> {
+        const user = await this.userRepository.findById(userId);
+
+        if (!user) {
+            throw new ResourceNotFoundError();
+        }
+
         const expenses = await this.expenseRepository.findManyByUserIdBetweenDates(
             userId,
             startDate,

@@ -11,7 +11,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             id: randomUUID(),
             title: data.title,
             amount: data.amount,
-            paidAt: data.paidAt,
+            paidAt: new Date(),
             categoryId: data.categoryId,
             userId: data.userId,
             updatedAt: null,
@@ -44,9 +44,9 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     async findManyByCategoryId(categoryId: string) {
-        const exepenses = this.items.filter((item) =>
-            item.categoryId === categoryId
-        );
+        const exepenses = this.items
+            .filter((item) => item.categoryId === categoryId)
+            .sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
 
         return exepenses;
     }
@@ -61,6 +61,19 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         );
 
         return totalExpense;
+    }
+
+    async getTotal(userId: string) {
+        const userTotal = this.items.filter((item) =>
+            item.userId === userId);
+
+        let total = new Decimal(0);
+
+        userTotal.forEach((item) => {
+            total = total.add(item.amount);
+        });
+
+        return total;
     }
 
     async update(id: string, data: UpdateExpenseData) {

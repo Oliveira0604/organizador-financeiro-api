@@ -1,7 +1,11 @@
+import { NotAllowedError } from "@/errors/not-allowed-error";
+import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
+import type { CategoryRepository } from "@/repositories/category-repository";
 import type { Expense, ExpenseRepository } from "@/repositories/expense-repository";
 
 interface FindManyByCategoryIdUseCaseRequest {
-    categoryId: string
+    categoryId: string,
+    userId: string
 }
 
 interface FindManyByCategoryIdUseCaseResponse {
@@ -9,12 +13,26 @@ interface FindManyByCategoryIdUseCaseResponse {
 }
 
 export class FindManyByCategoryIdUseCase {
-    constructor(private expenseRepository: ExpenseRepository) { }
+    constructor(
+        private expenseRepository: ExpenseRepository,
+        private categoryRepository: CategoryRepository
+    ) { }
 
     async execute({
         categoryId,
+        userId
     }: FindManyByCategoryIdUseCaseRequest): Promise<FindManyByCategoryIdUseCaseResponse> {
-        const expenses = await this.expenseRepository.findManyByCategoryId(categoryId);
+        const category = await this.categoryRepository.findById(categoryId);
+
+        if (!category) {
+            throw new ResourceNotFoundError();
+        }
+
+        if (category.userId !== userId) {
+            throw new NotAllowedError();
+        }
+
+        const expenses = await this.expenseRepository.findManyByCategoryId(category.id);
 
         return {
             expenses,
