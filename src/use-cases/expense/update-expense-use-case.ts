@@ -1,8 +1,10 @@
+import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { CategoryRepository } from "@/repositories/category-repository";
 import type { Expense, ExpenseRepository, UpdateExpenseData } from "@/repositories/expense-repository";
+import { isValidAmount } from "@/utils/is-valid-amount";
 
 interface UpdateExpenseUseCaseRequest {
     id: string,
@@ -13,7 +15,7 @@ interface UpdateExpenseUseCaseRequest {
 }
 
 interface UpdateExpenseUseCaseResponse {
-    expense: Expense | null
+    expense: Expense
 }
 
 export class UpdateExpenseUseCase {
@@ -45,7 +47,10 @@ export class UpdateExpenseUseCase {
             data.title = title;
         }
 
-        if (amount) {
+        if (amount !== undefined) {
+            if (!isValidAmount(amount)) {
+                throw new InvalidAmountError();
+            }
             data.amount = amount;
         }
 

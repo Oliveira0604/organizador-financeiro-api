@@ -2,6 +2,7 @@ import type { Expense } from "../expense-repository";
 import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { randomUUID } from "node:crypto";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
+import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 
 export class InMemoryExpenseRepository implements ExpenseRepository {
     public items: Expense[] = [];
@@ -80,7 +81,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         const expense = this.items.find((item) => item.id === id);
 
         if (!expense) {
-            return null;
+            throw new ResourceNotFoundError();
         }
 
         Object.assign(expense, data);

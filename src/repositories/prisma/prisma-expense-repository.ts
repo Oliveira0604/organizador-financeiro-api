@@ -8,19 +8,8 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             data: {
                 title: data.title,
                 amount: data.amount,
-                paidAt: data.paidAt,
-
-                user: {
-                    connect: {
-                        id: data.userId
-                    }
-                },
-
-                category: {
-                    connect: {
-                        id: data.categoryId
-                    }
-                }
+                userId: data.userId,
+                categoryId: data.categoryId
             }
         });
 

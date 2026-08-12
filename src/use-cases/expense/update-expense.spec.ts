@@ -5,6 +5,9 @@ import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-ex
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { Expense } from "@/repositories/expense-repository";
 import type { Category } from "@/repositories/category-repository";
+import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
+import { NotAllowedError } from "@/errors/not-allowed-error";
+import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 
 let expenseRepository: InMemoryExpenseRepository;
 let categoryRepository: InMemoryCategoryRepository;
@@ -22,59 +25,97 @@ describe("Update Expense Use Case", () => {
         category = await categoryRepository.create({
             name: "mercado",
             userId: "user-01",
-            createdAt: new Date(),
-            updatedAt: null
         });
 
         expense = await expenseRepository.create({
             title: "arroz",
             amount: new Decimal(15),
             categoryId: category.id,
-            paidAt: new Date(),
             userId: "user-01",
         });
     });
 
-    it("should be able to update an expense name", async () => {
-        await updateExpenseUseCase.execute({
+    it("should be able to update only the expense name", async () => {
+        const updatedExpense = await updateExpenseUseCase.execute({
             id: expense.id,
             title: "feijao",
-            amount: new Decimal(15),
-            categoryName: "mercado",
             userId: "user-01",
         });
 
-        expect(expense.title).toEqual("feijao");
+        expect(updatedExpense.expense.title).toEqual("feijao");
+        expect(updatedExpense.expense.amount).toEqual(new Decimal(15));
+        expect(updatedExpense.expense.categoryId).toEqual(category.id);
     });
 
-    it("should be able to update an expense amount", async () => {
-        await updateExpenseUseCase.execute({
+    it("should be able to update only the expense amount", async () => {
+        const updatedExpense = await updateExpenseUseCase.execute({
             id: expense.id,
-            title: "feijão",
             amount: new Decimal(25),
-            categoryName: "mercado",
             userId: "user-01"
         });
 
-        expect(expense.amount).toEqual(new Decimal(25));
+        expect(updatedExpense.expense.amount).toEqual(new Decimal(25));
+        expect(updatedExpense.expense.categoryId).toEqual(category.id);
+        expect(updatedExpense.expense.title).toEqual("arroz");
     });
 
-    it("should be able to update an expense category", async () => {
+    it("should be able to update only the expense category", async () => {
         const newCategory = await categoryRepository.create({
             name: "padaria",
             userId: "user-01",
-            createdAt: new Date(),
-            updatedAt: null
         });
 
-        await updateExpenseUseCase.execute({
+        const updatedExpense = await updateExpenseUseCase.execute({
             id: expense.id,
-            title: "feijão",
-            amount: new Decimal(25),
             categoryName: "padaria",
             userId: "user-01"
         });
 
-        expect(expense.categoryId).toEqual(newCategory.id);
+        expect(updatedExpense.expense.categoryId).toEqual(newCategory.id);
+        expect(updatedExpense.expense.title).toEqual("arroz");
+        expect(updatedExpense.expense.amount).toEqual(new Decimal(15));
+    });
+
+    it("should not be able to update any field if the expense doesn't exist", async () => {
+        await expect(
+            updateExpenseUseCase.execute({
+                id: "expense-id",
+                title: "arroz",
+                amount: new Decimal(100),
+                categoryName: "test",
+                userId: "user-01"
+            })
+        ).rejects.toBeInstanceOf(ResourceNotFoundError);
+    });
+
+    it("should not update an expense from another person", async () => {
+        await expect(
+            updateExpenseUseCase.execute({
+                id: expense.id,
+                title: "arroz",
+                amount: new Decimal(25),
+                userId: "user-02"
+            })
+        ).rejects.toBeInstanceOf(NotAllowedError);
+    });
+
+    it("should not update with a negative amount", async () => {
+        await expect(
+            updateExpenseUseCase.execute({
+                id: expense.id,
+                amount: new Decimal(-10),
+                userId: "user-01"
+            })
+        ).rejects.toBeInstanceOf(InvalidAmountError);
+    });
+
+    it("should not update if the category doesn't exist", async () => {
+        await expect(
+            updateExpenseUseCase.execute({
+                id: expense.id,
+                categoryName: "non-existent",
+                userId: "user-01"
+            })
+        ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
 });
