@@ -92,6 +92,10 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     async delete(id: string) {
         const expense = this.items.find((items) => items.id === id);
 
-        expense!.deletedAt = new Date();
+        if (!expense) {
+            throw new ResourceNotFoundError();
+        }
+
+        expense.deletedAt = new Date();
     }
 }

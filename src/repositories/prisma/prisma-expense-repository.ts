@@ -33,7 +33,8 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 paidAt: {
                     gte: startDate,
                     lt: endDate
-                }
+                },
+                deletedAt: null
             },
 
             orderBy: {
