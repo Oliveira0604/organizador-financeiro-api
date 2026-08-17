@@ -77,8 +77,8 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         return total;
     }
 
-    async update(id: string, data: UpdateExpenseData) {
-        const expense = this.items.find((item) => item.id === id);
+    async update(id: string, userId: string, data: UpdateExpenseData) {
+        const expense = this.items.find((item) => item.id === id && item.userId === userId);
 
         if (!expense) {
             throw new ResourceNotFoundError();

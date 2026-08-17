@@ -66,6 +66,7 @@ export class UpdateExpenseUseCase {
 
         const upatedExpense = await this.expenseRepository.update(
             expense.id,
+            userId,
             data
         );
 

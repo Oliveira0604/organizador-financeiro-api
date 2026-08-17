@@ -52,5 +52,3 @@ describe("Delete Expense Use Case", () => {
         ).rejects.toBeInstanceOf(NotAllowedError);
     });
 });
-
-//TODO: The test that verify if the deleted expenses are not appering

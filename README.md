@@ -5,9 +5,8 @@ An app to organize finance
 - [ x ] O sistema deve ser capaz de atualizar dados de um usuário
 - [ x ] O sistema deve ser capaz de deletar um usuário
 - [ ] O sistema deve ser capaz de autenticar um usuário
-- [ ] O sistema deve ser capaz de cadastrar a renda mensal
-- [ ] O sistema deve ser capaz de atualizar a renda mensal
-- [ ] O sistema deve ser capaz de acrescentar dinheiro extra à renda
+- [ x ] O sistema deve ser capaz de cadastrar rendas 
+- [] O sistema deve ser capaz de atualizar rendas 
 - [ x ] O sistema deve ser capaz de cadastrar uma despesa
 - [ x ] O sistema deve ser capaz de atualizar uma despesa
 - [ x ] O sistema deve ser capaz de remover uma despesa

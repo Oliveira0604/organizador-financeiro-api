@@ -1,5 +1,4 @@
-import type { Income } from "../income-repository";
-import type { CreateIncomeData, IncomeRepository, UpdateIncomeData } from "../income-repository";
+import type { CreateIncomeData, IncomeRepository, UpdateIncomeData, Income } from "@/repositories/income-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { randomUUID } from "node:crypto";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
@@ -12,7 +11,7 @@ export class InMemoryIncomeRepository implements IncomeRepository {
             id: randomUUID(),
             title: data.title,
             amount: data.amount,
-            receivedAt: data.receivedAt,
+            receivedAt: new Date(),
             categoryId: data.categoryId,
             userId: data.userId,
             updatedAt: null,
@@ -55,7 +54,7 @@ export class InMemoryIncomeRepository implements IncomeRepository {
         return total;
     }
 
-    async update(id: string, data: UpdateIncomeData) {
+    async update(id: string, userId: string, data: UpdateIncomeData) {
         const income = this.items.find((item) => item.id === id);
 
         if (!income) {
