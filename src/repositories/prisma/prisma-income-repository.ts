@@ -43,7 +43,8 @@ export class PrismaIncomeRepository implements IncomeRepository {
                 receivedAt: {
                     gte: startDate,
                     lt: endDate
-                }
+                },
+                deletedAt: null
             },
 
             orderBy: {

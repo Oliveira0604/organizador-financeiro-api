@@ -34,11 +34,13 @@ export class InMemoryIncomeRepository implements IncomeRepository {
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
-        const incomes = this.items.filter((item) =>
-            item.userId === userId &&
-            item.receivedAt >= startDate &&
-            item.receivedAt < endDate
-        );
+        const incomes = this.items
+            .filter((item) =>
+                item.userId === userId &&
+                item.receivedAt >= startDate &&
+                item.receivedAt < endDate
+            )
+            .sort((a, b) => a.receivedAt.getTime() - b.receivedAt.getTime());
 
         return incomes;
     }

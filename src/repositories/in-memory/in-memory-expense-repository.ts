@@ -35,11 +35,13 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
-        const expenses = this.items.filter((item) =>
-            item.userId === userId &&
-            item.paidAt >= startDate &&
-            item.paidAt < endDate
-        );
+        const expenses = this.items.
+            filter((item) =>
+                item.userId === userId &&
+                item.paidAt >= startDate &&
+                item.paidAt < endDate,
+            )
+            .sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
 
         return expenses;
     }

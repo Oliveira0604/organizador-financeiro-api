@@ -40,5 +40,3 @@ export class FindManyByUserIdBetweenDatesUseCase {
         };
     }
 }
-
-//TODO: Finish the use case

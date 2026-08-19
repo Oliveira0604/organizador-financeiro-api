@@ -77,10 +77,10 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         });
 
         expect(expenses).toHaveLength(2);
-        expect(expenses[0]!.paidAt).toEqual(new Date(2026, 7, 5));
-        expect(expenses[1]!.paidAt).toEqual(new Date(2026, 7, 10));
-        expect(expenses[0]!.userId).toEqual(user.id);
-        expect(expenses[1]!.userId).toEqual(user.id);
+        expect(expenses[0]?.paidAt).toEqual(new Date(2026, 7, 5));
+        expect(expenses[1]?.paidAt).toEqual(new Date(2026, 7, 10));
+        expect(expenses[0]?.userId).toEqual(user.id);
+        expect(expenses[1]?.userId).toEqual(user.id);
     });
 
     it("should not get the expenses from another person", async () => {
@@ -123,6 +123,3 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(expenses).toEqual([]);
     });
 });
-
-
-//TODO: Refactor the update use case and delete 
