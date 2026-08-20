@@ -4,8 +4,8 @@ import type { UserRepository } from "@/repositories/user-repository";
 
 interface FindManyByUserIdBetweenDatesUseCaseRequest {
     userId: string,
-    startDate: Date,
-    endDate: Date
+    startDate?: Date,
+    endDate?: Date
 }
 
 interface FindManyByUserIdBetweenDatesUseCaseResponse {
@@ -23,6 +23,12 @@ export class FindManyByUserIdBetweenDatesUseCase {
         startDate,
         endDate
     }: FindManyByUserIdBetweenDatesUseCaseRequest): Promise<FindManyByUserIdBetweenDatesUseCaseResponse> {
+
+        const now = new Date();
+
+        const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
+        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
@@ -31,8 +37,8 @@ export class FindManyByUserIdBetweenDatesUseCase {
 
         const incomes = await this.incomeRepository.findManyByUserIdBetweenDates(
             userId,
-            startDate,
-            endDate
+            resolvedStartDate,
+            resolvedEndDate
         );
 
         return {
