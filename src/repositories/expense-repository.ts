@@ -27,7 +27,7 @@ export type Expense = {
 export interface ExpenseRepository {
     create(data: CreateExpenseData): Promise<Expense>
     findById(id: string): Promise<Expense | null>
-    findManyByCategoryId(categoryId: string): Promise<Expense[]>
+    findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date): Promise<Expense[]>
     findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date): Promise<Expense[]>
     getTotal(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByCategory(userId: string, categoryId: string): Promise<Decimal>

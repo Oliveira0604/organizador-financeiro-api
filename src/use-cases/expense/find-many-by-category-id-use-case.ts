@@ -5,7 +5,9 @@ import type { Expense, ExpenseRepository } from "@/repositories/expense-reposito
 
 interface FindManyByCategoryIdUseCaseRequest {
     categoryId: string,
-    userId: string
+    userId: string,
+    startDate?: Date,
+    endDate?: Date
 }
 
 interface FindManyByCategoryIdUseCaseResponse {
@@ -20,8 +22,15 @@ export class FindManyByCategoryIdUseCase {
 
     async execute({
         categoryId,
-        userId
+        userId,
+        startDate,
+        endDate
     }: FindManyByCategoryIdUseCaseRequest): Promise<FindManyByCategoryIdUseCaseResponse> {
+        const now = new Date();
+
+        const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
+        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
         const category = await this.categoryRepository.findById(categoryId);
 
         if (!category) {
@@ -32,7 +41,7 @@ export class FindManyByCategoryIdUseCase {
             throw new NotAllowedError();
         }
 
-        const expenses = await this.expenseRepository.findManyByCategoryId(category.id);
+        const expenses = await this.expenseRepository.findManyByCategoryId(category.id, resolvedStartDate, resolvedEndDate);
 
         return {
             expenses,
