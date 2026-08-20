@@ -12,7 +12,7 @@ An app to organize finance
 - [ x ] O sistema deve ser capaz de remover uma despesa
 - [ x ] O sistema deve ser capaz de categorizar as despesas
 - [ x ] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
-- [ ] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
+- [ x ] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
 - [ ] O sistema deve ser capaz de definir limite de gastos para cada área de acordo com o usuário
 - [ ] O sistema deve ser capaz de dar dicas de economia
 - [ ] O sistema deve ser capaz de explicar entre renda fixa e renda variável

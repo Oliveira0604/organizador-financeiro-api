@@ -40,5 +40,3 @@ export class GetTotalByCategoryIdUseCase {
         };
     }
 }
-
-//TO DO: refactor this use case adding the verifications in userId and categoryId

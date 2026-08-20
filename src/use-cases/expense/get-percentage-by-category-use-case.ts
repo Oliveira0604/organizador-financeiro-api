@@ -4,7 +4,9 @@ import { getPercentage } from "@/utils/get-percentage";
 
 interface GetPercetageByCategoryUseCaseRequest {
     userId: string,
-    categoryId: string
+    categoryId: string,
+    startDate?: Date,
+    endDate?: Date
 }
 
 interface GetPercetageByCategoryUseCaseResponse {
@@ -16,11 +18,18 @@ export class GetPercentageByCategoryUseCase {
 
     async execute({
         userId,
-        categoryId
+        categoryId,
+        startDate,
+        endDate
     }: GetPercetageByCategoryUseCaseRequest): Promise<GetPercetageByCategoryUseCaseResponse> {
+        const now = new Date();
+
+        const reolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
+        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0);
+
         const categoryTotal = await this.expenseRepository.getTotalByCategory(userId, categoryId);
 
-        const userTotal = await this.expenseRepository.getTotal(userId);
+        const userTotal = await this.expenseRepository.getTotal(userId, reolvedStartDate, resolvedEndDate);
 
         const percentage = getPercentage(userTotal, categoryTotal);
 

@@ -69,10 +69,14 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return totalByCategory._sum.amount ?? new Decimal(0);
     }
 
-    async getTotal(userId: string) {
+    async getTotal(userId: string, startDate: Date, endDate: Date) {
         const totalExpense = await prisma.expense.aggregate({
             where: {
-                userId
+                userId,
+                paidAt: {
+                    gte: startDate,
+                    lt: endDate
+                }
             },
             _sum: {
                 amount: true
