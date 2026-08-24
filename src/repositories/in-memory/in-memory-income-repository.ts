@@ -34,30 +34,63 @@ export class InMemoryIncomeRepository implements IncomeRepository {
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
-        const incomes = this.items
+        const userIncomes = this.items
             .filter((item) =>
                 item.userId === userId &&
                 item.receivedAt >= startDate &&
                 item.receivedAt < endDate
             )
-            .sort((a, b) => a.receivedAt.getTime() - b.receivedAt.getTime());
+            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime());
 
-        return incomes;
+        return userIncomes;
     }
 
-    async getTotalByCategory(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+        const categoryIncomes = this.items.
+            filter((item) =>
+                item.userId === userId &&
+                item.categoryId === categoryId &&
+                item.receivedAt >= startDate &&
+                item.receivedAt <= endDate
+            )
+            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime());
+
+        return categoryIncomes;
+    }
+
+    async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
         const total = this.items.filter((item) =>
             item.userId === userId &&
             item.categoryId === categoryId &&
             item.receivedAt >= startDate &&
-            item.receivedAt < endDate
+            item.receivedAt <= endDate
+        ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
+
+        return total;
+    }
+
+    async getTotalByUserId(userId: string, startDate: Date, endDate: Date) {
+        const total = this.items.filter((item) =>
+            item.userId === userId &&
+            item.receivedAt >= startDate &&
+            item.receivedAt <= endDate
+        ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
+
+        return total;
+    }
+
+    async getTotal(userId: string, startDate: Date, endDate: Date) {
+        const total = this.items.filter((item) =>
+            item.userId === userId &&
+            item.receivedAt >= startDate &&
+            item.receivedAt <= endDate
         ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
 
         return total;
     }
 
     async update(id: string, userId: string, data: UpdateIncomeData) {
-        const income = this.items.find((item) => item.id === id);
+        const income = this.items.find((item) => item.id === id && item.userId === userId);
 
         if (!income) {
             return null;
@@ -68,8 +101,8 @@ export class InMemoryIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async delete(id: string) {
-        const incomeIndex = this.items.findIndex((item) => item.id === id);
+    async delete(id: string, userId: string) {
+        const incomeIndex = this.items.findIndex((item) => item.id === id && item.userId === userId);
 
         this.items.splice(incomeIndex, 1);
     }

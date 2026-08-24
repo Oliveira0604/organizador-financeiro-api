@@ -25,9 +25,14 @@ export class GetPercentageByCategoryUseCase {
         const now = new Date();
 
         const reolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
-        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
-        const categoryTotal = await this.expenseRepository.getTotalByCategory(userId, categoryId);
+        const categoryTotal = await this.expenseRepository.getTotalByCategoryId(
+            userId,
+            categoryId,
+            reolvedStartDate,
+            resolvedEndDate
+        );
 
         const userTotal = await this.expenseRepository.getTotal(userId, reolvedStartDate, resolvedEndDate);
 

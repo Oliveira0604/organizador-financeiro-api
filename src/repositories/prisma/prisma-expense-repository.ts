@@ -32,7 +32,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 userId,
                 paidAt: {
                     gte: startDate,
-                    lt: endDate
+                    lte: endDate
                 },
                 deletedAt: null
             },
@@ -55,7 +55,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return expenses;
     }
 
-    async getTotalByCategory(userId: string, categoryId: string) {
+    async getTotalByCategoryId(userId: string, categoryId: string) {
         const totalByCategory = await prisma.expense.aggregate({
             where: {
                 userId,
@@ -75,7 +75,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 userId,
                 paidAt: {
                     gte: startDate,
-                    lt: endDate
+                    lte: endDate
                 }
             },
             _sum: {
@@ -100,10 +100,11 @@ export class PrismaExpenseRepository implements ExpenseRepository {
 
     }
 
-    async delete(id: string) {
+    async delete(id: string, userId: string) {
         await prisma.expense.delete({
             where: {
                 id,
+                userId
             }
         });
     }

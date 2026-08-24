@@ -10,7 +10,7 @@ export class InMemoryCategoryRepository implements CategoryRepository {
             id: randomUUID(),
             name: data.name,
             userId: data.userId,
-            createdAt: data.createdAt,
+            createdAt: null,
             updatedAt: null
         };
 

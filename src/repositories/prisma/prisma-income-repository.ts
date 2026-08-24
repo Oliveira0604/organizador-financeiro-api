@@ -37,7 +37,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
-        const incomes = await prisma.income.findMany({
+        const userIncomes = await prisma.income.findMany({
             where: {
                 userId,
                 receivedAt: {
@@ -52,7 +52,22 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return incomes;
+        return userIncomes;
+    }
+
+    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+        const categoryIncomes = await prisma.income.findMany({
+            where: {
+                userId,
+                categoryId,
+                receivedAt: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            },
+        });
+
+        return categoryIncomes;
     }
 
     async getTotal(userId: string, startDate: Date, endDate: Date) {
@@ -61,7 +76,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
                 userId,
                 receivedAt: {
                     gte: startDate,
-                    lt: endDate
+                    lte: endDate
                 }
             },
             _sum: {
@@ -72,15 +87,14 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return totalIncome._sum.amount ?? new Decimal(0);
     }
 
-    async getTotalByCategory(userId: string, categoryId: string, startDate: Date, endDate: Date) {
-
+    async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
         const totalIncome = await prisma.income.aggregate({
             where: {
                 userId,
                 categoryId,
                 receivedAt: {
                     gte: startDate,
-                    lt: endDate
+                    lte: endDate
                 },
             },
             _sum: {
@@ -89,6 +103,23 @@ export class PrismaIncomeRepository implements IncomeRepository {
         });
 
         return totalIncome._sum.amount ?? new Decimal(0);
+    }
+
+    async getTotalByUserId(id: string, startDate: Date, endDate: Date) {
+        const total = await prisma.income.aggregate({
+            where: {
+                id,
+                receivedAt: {
+                    gte: startDate,
+                    lte: endDate
+                }
+            },
+            _sum: {
+                amount: true
+            }
+        });
+
+        return total._sum.amount ?? new Decimal(0);
     }
 
     async update(id: string, userId: string, data: UpdateIncomeData) {

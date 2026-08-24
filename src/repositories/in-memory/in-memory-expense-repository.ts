@@ -41,40 +41,56 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
                 item.paidAt >= startDate &&
                 item.paidAt < endDate,
             )
-            .sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
+            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime());
 
         return expenses;
     }
 
-    async findManyByCategoryId(categoryId: string) {
+    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date) {
         const exepenses = this.items
-            .filter((item) => item.categoryId === categoryId)
-            .sort((a, b) => a.paidAt.getTime() - b.paidAt.getTime());
+            .filter((item) =>
+                item.categoryId === categoryId &&
+                item.paidAt >= startDate &&
+                item.paidAt <= endDate
+            )
+            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime());
 
         return exepenses;
     }
 
-    async getTotalByCategory(userId: string, categoryId: string) {
-        const totalExpense = this.items.filter((item) =>
+    async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+        const categoryTotal = this.items.filter((item) =>
             item.userId === userId &&
-            item.categoryId === categoryId
+            item.categoryId === categoryId &&
+            item.paidAt >= startDate &&
+            item.paidAt <= endDate
         ).reduce(
             (accumulator, expense) => accumulator.plus(expense.amount),
             new Decimal(0)
         );
 
-        return totalExpense;
+        return categoryTotal;
     }
 
-    async getTotal(userId: string) {
+    async getTotalByUserId(userId: string, startDate: Date, endDate: Date) {
         const userTotal = this.items.filter((item) =>
-            item.userId === userId);
+            item.userId === userId &&
+            item.paidAt >= startDate &&
+            item.paidAt <= endDate
+        ).reduce(
+            (accumulator, expense) => accumulator.plus(expense.amount), new Decimal(0)
+        );
 
-        let total = new Decimal(0);
+        return userTotal;
+    }
 
-        userTotal.forEach((item) => {
-            total = total.add(item.amount);
-        });
+    async getTotal(userId: string, startDate: Date, endDate: Date) {
+        const total = this.items.filter((item) =>
+            item.userId === userId &&
+            item.paidAt >= startDate &&
+            item.paidAt <= endDate
+        ).reduce((accumulator, expense) => accumulator.plus(expense.amount), new Decimal(0));
+
 
         return total;
     }
@@ -91,8 +107,8 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
-    async delete(id: string) {
-        const expense = this.items.find((items) => items.id === id);
+    async delete(id: string, userId: string) {
+        const expense = this.items.find((items) => items.id === id && items.userId === userId);
 
         if (!expense) {
             throw new ResourceNotFoundError();

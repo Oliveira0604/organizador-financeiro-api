@@ -29,7 +29,7 @@ export class FindManyByCategoryIdUseCase {
         const now = new Date();
 
         const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
-        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0);
+        const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
         const category = await this.categoryRepository.findById(categoryId);
 

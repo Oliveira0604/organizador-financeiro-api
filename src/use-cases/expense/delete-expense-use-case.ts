@@ -24,6 +24,6 @@ export class DeleteExpenseUseCase {
             throw new NotAllowedError();
         }
 
-        await this.expenseRepository.delete(id);
+        await this.expenseRepository.delete(id, userId);
     }
 }

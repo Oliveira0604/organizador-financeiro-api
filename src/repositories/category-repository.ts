@@ -10,7 +10,7 @@ export type UpdateCategoryData = {
 export type Category = {
     id: string,
     name: string,
-    createdAt: Date
+    createdAt: Date | null
     updatedAt: Date | null
     userId: string
 }
