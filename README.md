@@ -1,4 +1,27 @@
-An app to organize finance
+# Organizador Financeiro
+
+API backend para um agente financeiro integrado ao WhatsApp.
+
+## Sobre o projeto
+
+Projeto pessoal desenvolvido para praticar desenvolvimento backend
+com Node.js e TypeScript, aplicando princípios de Clean Architecture,
+separação de responsabilidades e testes automatizados.
+
+## Tecnologias
+
+- Node.js
+- TypeScript
+- Fastify
+- Prisma
+- PostgreSQL
+- Vitest
+- Docker
+
+## Arquitetura
+
+Breve explicação de como Controllers, Use Cases e Repositories
+estão organizados e qual é a responsabilidade de cada camada.
 
 ## RFs 
 - [ x ] O sistema deve ser capaz de cadastrar um usuário
