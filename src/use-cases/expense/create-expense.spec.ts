@@ -89,5 +89,3 @@ describe("Create Expense Use Case", () => {
         expect(expenseRepository.items).toHaveLength(0);
     });
 });
-
-//TO DO: To refactor this tests and the other, adding the verification like (userId and etc).
