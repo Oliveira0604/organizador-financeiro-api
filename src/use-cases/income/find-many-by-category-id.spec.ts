@@ -162,7 +162,7 @@ describe("Find Many By Category Id Use Case", () => {
         expect(incomes.find((income) => income.id === outOfRangeIncome.id)).toBeUndefined();
     });
 
-    it("should not get the incomes from another person", async () => {
+    it("should not get the incomes from another user", async () => {
         const secondUser = await userRepository.create({
             name: "May",
             phoneNumber: "+55 11 8888-8888"
