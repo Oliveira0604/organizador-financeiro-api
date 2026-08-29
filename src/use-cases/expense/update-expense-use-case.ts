@@ -1,3 +1,4 @@
+import { InvalidStringError } from "@/errors/invalid-string-error";
 import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
@@ -43,7 +44,10 @@ export class UpdateExpenseUseCase {
 
         const data: UpdateExpenseData = {};
 
-        if (title) {
+        if (title !== undefined) {
+            if (title.trim() === "") {
+                throw new InvalidStringError("title");
+            }
             data.title = title;
         }
 
@@ -54,7 +58,10 @@ export class UpdateExpenseUseCase {
             data.amount = amount;
         }
 
-        if (categoryName) {
+        if (categoryName !== undefined) {
+            if (categoryName.trim() === "") {
+                throw new InvalidStringError("categoryName");
+            }
             const category = await this.categoryRepository.findByName(userId, categoryName);
 
             if (!category) {
@@ -64,14 +71,13 @@ export class UpdateExpenseUseCase {
             data.categoryId = category.id;
         }
 
-        const upatedExpense = await this.expenseRepository.update(
+        const updatedExpense = await this.expenseRepository.update(
             expense.id,
-            userId,
             data
         );
 
         return {
-            expense: upatedExpense
+            expense: updatedExpense
         };
     }
 }

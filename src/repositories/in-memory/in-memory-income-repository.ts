@@ -89,11 +89,11 @@ export class InMemoryIncomeRepository implements IncomeRepository {
         return total;
     }
 
-    async update(id: string, userId: string, data: UpdateIncomeData) {
-        const income = this.items.find((item) => item.id === id && item.userId === userId);
+    async update(id: string, data: UpdateIncomeData) {
+        const income = this.items.find((item) => item.id === id);
 
         if (!income) {
-            return null;
+            throw new ResourceNotFoundError();
         }
 
         Object.assign(income, data);

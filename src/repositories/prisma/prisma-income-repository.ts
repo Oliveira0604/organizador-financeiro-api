@@ -134,11 +134,16 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async delete(id: string) {
-        await prisma.income.delete({
+    async delete(id: string, userId: string) {
+        await prisma.income.update({
             where: {
                 id,
+                userId
+            },
+            data: {
+                deletedAt: new Date()
             }
         });
+
     }
 }

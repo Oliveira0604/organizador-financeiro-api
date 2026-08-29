@@ -9,7 +9,8 @@ export type CreateIncomeData = {
 
 export type UpdateIncomeData = {
     title?: string,
-    amount?: string,
+    amount?: Decimal,
+    receivedAt?: Date
 }
 
 export type Income = {
@@ -31,6 +32,6 @@ export interface IncomeRepository {
     getTotal(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByUserId(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
-    update(id: string, userId: string, data: UpdateIncomeData): Promise<Income | null>
+    update(id: string, data: UpdateIncomeData): Promise<Income>
     delete(id: string, userId: string): Promise<void>
 }

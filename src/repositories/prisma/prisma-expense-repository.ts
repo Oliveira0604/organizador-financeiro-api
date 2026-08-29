@@ -20,6 +20,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         const expense = await prisma.expense.findUnique({
             where: {
                 id,
+                deletedAt: null
             }
         });
 
@@ -45,21 +46,34 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return dateExpenses;
     }
 
-    async findManyByCategoryId(categoryId: string) {
+    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date) {
         const expenses = await prisma.expense.findMany({
             where: {
                 categoryId,
+                paidAt: {
+                    gte: startDate,
+                    lte: endDate
+                },
+                deletedAt: null
+            },
+            orderBy: {
+                paidAt: "desc"
             }
         });
 
         return expenses;
     }
 
-    async getTotalByCategoryId(userId: string, categoryId: string) {
+    async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
         const totalByCategory = await prisma.expense.aggregate({
             where: {
                 userId,
-                categoryId
+                categoryId,
+                paidAt: {
+                    gte: startDate,
+                    lte: endDate
+                },
+                deletedAt: null
             },
             _sum: {
                 amount: true
@@ -69,6 +83,24 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return totalByCategory._sum.amount ?? new Decimal(0);
     }
 
+    async getTotalByUserId(userId: string, startDate: Date, endDate: Date) {
+        const total = await prisma.expense.aggregate({
+            where: {
+                userId,
+                paidAt: {
+                    gte: startDate,
+                    lte: endDate
+                },
+                deletedAt: null
+            },
+            _sum: {
+                amount: true
+            }
+        });
+
+        return total._sum.amount ?? new Decimal(0);
+    }
+
     async getTotal(userId: string, startDate: Date, endDate: Date) {
         const totalExpense = await prisma.expense.aggregate({
             where: {
@@ -76,7 +108,8 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 paidAt: {
                     gte: startDate,
                     lte: endDate
-                }
+                },
+                deletedAt: null
             },
             _sum: {
                 amount: true
@@ -101,10 +134,13 @@ export class PrismaExpenseRepository implements ExpenseRepository {
     }
 
     async delete(id: string, userId: string) {
-        await prisma.expense.delete({
+        await prisma.expense.update({
             where: {
                 id,
                 userId
+            },
+            data: {
+                deletedAt: new Date()
             }
         });
     }
