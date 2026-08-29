@@ -9,8 +9,8 @@ import type { UserRepository } from "@/repositories/user-repository";
 import { isValidAmount } from "@/utils/is-valid-amount";
 
 interface UpdateIncomeUseCaseRequest {
-    userId: string,
     incomeId: string,
+    userId: string,
     title?: string,
     amount?: Decimal,
     receivedAt?: Date
