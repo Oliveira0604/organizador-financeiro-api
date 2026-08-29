@@ -2,7 +2,6 @@ import type { Expense } from "../expense-repository";
 import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { randomUUID } from "node:crypto";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
-import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 
 export class InMemoryExpenseRepository implements ExpenseRepository {
     public items: Expense[] = [];
@@ -25,11 +24,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     async findById(id: string) {
-        const expense = this.items.find((item) => item.id === id);
-
-        if (!expense) {
-            return null;
-        }
+        const expense = this.items.find((item) => item.id === id)!;
 
         return expense;
     }
@@ -96,24 +91,19 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     }
 
     async update(id: string, data: UpdateExpenseData) {
-        const expense = this.items.find((item) => item.id === id);
-
-        if (!expense) {
-            throw new ResourceNotFoundError();
-        }
+        const expense = this.items.find((item) => item.id === id)!;
 
         Object.assign(expense, data);
 
         return expense;
     }
 
-    async delete(id: string, userId: string) {
-        const expense = this.items.find((items) => items.id === id && items.userId === userId);
+    async delete(id: string) {
+        const expense = this.items.find((items) => items.id === id);
 
-        if (!expense) {
-            throw new ResourceNotFoundError();
+        if (expense) {
+            expense.deletedAt = new Date();
         }
 
-        expense.deletedAt = new Date();
     }
 }

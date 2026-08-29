@@ -33,5 +33,5 @@ export interface IncomeRepository {
     getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByUserId(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
     update(id: string, data: UpdateIncomeData): Promise<Income>
-    delete(id: string, userId: string): Promise<void>
+    delete(id: string): Promise<void>
 }

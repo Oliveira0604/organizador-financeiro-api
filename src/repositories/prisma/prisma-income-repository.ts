@@ -122,11 +122,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return total._sum.amount ?? new Decimal(0);
     }
 
-    async update(id: string, userId: string, data: UpdateIncomeData) {
+    async update(id: string, data: UpdateIncomeData) {
         const income = await prisma.income.update({
             where: {
                 id,
-                userId
             },
             data
         });
@@ -134,11 +133,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async delete(id: string, userId: string) {
+    async delete(id: string) {
         await prisma.income.update({
             where: {
                 id,
-                userId
             },
             data: {
                 deletedAt: new Date()
