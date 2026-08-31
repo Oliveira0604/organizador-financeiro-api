@@ -5,6 +5,7 @@ import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-by-user-id-betw
 import type { User } from "@/repositories/user-repository";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
+import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let incomeRepository: InMemoryIncomeRepository;
 let userRepository: InMemoryUserRepository;
@@ -82,6 +83,39 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(incomes[2]?.amount).toEqual(new Decimal(25000));
         expect(incomes[2]?.categoryId).toEqual("category-03");
         expect(incomes[2]?.userId).toEqual(user.id);
+    });
+
+    it("should return the incomes in the current month if the range of dates are not provided", async () => {
+        const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
+            userId: user.id,
+        });
+
+        expect(incomes).toHaveLength(3);
+        expect(incomes[0]?.id).toEqual(expect.any(String));
+        expect(incomes[0]?.title).toEqual("Month salary");
+        expect(incomes[0]?.amount).toEqual(new Decimal(20000));
+        expect(incomes[0]?.categoryId).toEqual("category-01");
+        expect(incomes[0]?.userId).toEqual(user.id);
+
+        expect(incomes[1]?.title).toEqual("Freelance");
+        expect(incomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(incomes[1]?.categoryId).toEqual("category-02");
+        expect(incomes[1]?.userId).toEqual(user.id);
+
+        expect(incomes[2]?.title).toEqual("Investiments");
+        expect(incomes[2]?.amount).toEqual(new Decimal(25000));
+        expect(incomes[2]?.categoryId).toEqual("category-03");
+        expect(incomes[2]?.userId).toEqual(user.id);
+    });
+
+    it("should not get the category incomes if start date is greater than end date", async () => {
+        await expect(
+            findManyByUserIdBetweenDatesUseCase.execute({
+                userId: user.id,
+                startDate: new Date(2026, 7, 31),
+                endDate: new Date(2026, 7, 1)
+            })
+        ).rejects.toBeInstanceOf(InvalidDateError);
     });
 
     it("should not be able get the incomes if the user doesn't exists", async () => {

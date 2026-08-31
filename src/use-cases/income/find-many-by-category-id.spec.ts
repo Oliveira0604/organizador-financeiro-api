@@ -8,6 +8,7 @@ import type { User } from "@/repositories/user-repository";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
+import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let incomeRepository: InMemoryIncomeRepository;
 let userRepository: InMemoryUserRepository;
@@ -103,6 +104,42 @@ describe("Find Many By Category Id Use Case", () => {
 
     });
 
+    it("should return the incomes from current month if the range of date is not provided", async () => {
+        const { incomes } = await findManyByCategoryIdUseCase.execute({
+            userId: user.id,
+            categoryId: firstCategory.id,
+        });
+
+        const { incomes: secondIncomes } = await findManyByCategoryIdUseCase.execute({
+            userId: user.id,
+            categoryId: secondCategory.id,
+        });
+
+        expect(incomes).toHaveLength(1);
+        expect(incomes[0]?.title).toEqual("salary");
+        expect(incomes[0]?.amount).toEqual(new Decimal(30000));
+        expect(incomes[0]?.receivedAt).toEqual(new Date(2026, 7, 5));
+
+        expect(secondIncomes).toHaveLength(2);
+        expect(secondIncomes[0]?.title).toEqual("google project");
+        expect(secondIncomes[0]?.amount).toEqual(new Decimal(15000));
+        expect(secondIncomes[0]?.receivedAt).toEqual(new Date(2026, 7, 10));
+        expect(secondIncomes[1]?.title).toEqual("amazon project");
+        expect(secondIncomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(secondIncomes[1]?.receivedAt).toEqual(new Date(2026, 7, 20));
+    });
+
+    it("should not get the category incomes if start date is greater than end date", async () => {
+        await expect(
+            findManyByCategoryIdUseCase.execute({
+                userId: user.id,
+                categoryId: firstCategory.id,
+                startDate: new Date(2026, 7, 31),
+                endDate: new Date(2026, 7, 1)
+            })
+        ).rejects.toBeInstanceOf(InvalidDateError);
+    });
+
     it("should not get the category incomes if the user doesn't exist", async () => {
         await expect(
             findManyByCategoryIdUseCase.execute({
@@ -190,4 +227,3 @@ describe("Find Many By Category Id Use Case", () => {
     });
 });
 
-// TODO: Finish this test and commit (I've already commited the use case but didn't do the git push)

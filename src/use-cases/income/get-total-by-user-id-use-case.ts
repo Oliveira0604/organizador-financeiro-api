@@ -1,3 +1,4 @@
+import { InvalidDateError } from "@/errors/invalid-date-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { IncomeRepository } from "@/repositories/income-repository";
@@ -24,6 +25,10 @@ export class GetTotalByUserIdUseCase {
         startDate,
         endDate
     }: GetTotalByUserIdUseCaseRequest): Promise<GetTotalByUserIdUseCaseResponse> {
+
+        if (startDate && endDate && startDate > endDate) {
+            throw new InvalidDateError();
+        }
         const now = new Date();
 
         const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);

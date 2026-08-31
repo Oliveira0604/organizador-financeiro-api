@@ -1,3 +1,4 @@
+import { InvalidDateError } from "@/errors/invalid-date-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Income, IncomeRepository } from "@/repositories/income-repository";
 import type { UserRepository } from "@/repositories/user-repository";
@@ -23,6 +24,10 @@ export class FindManyByUserIdBetweenDatesUseCase {
         startDate,
         endDate
     }: FindManyByUserIdBetweenDatesUseCaseRequest): Promise<FindManyByUserIdBetweenDatesUseCaseResponse> {
+
+        if (startDate && endDate && startDate > endDate) {
+            throw new InvalidDateError();
+        }
 
         const now = new Date();
 

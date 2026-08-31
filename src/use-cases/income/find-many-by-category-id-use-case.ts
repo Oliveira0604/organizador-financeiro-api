@@ -1,3 +1,4 @@
+import { InvalidDateError } from "@/errors/invalid-date-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { CategoryRepository } from "@/repositories/category-repository";
@@ -28,6 +29,11 @@ export class FindManyByCategoryIdUseCase {
         startDate,
         endDate
     }: FindManyByCategoryIdUseCaseRequest): Promise<FindManyByCategoryIdUseCaseResponse> {
+
+        if (startDate && endDate && startDate > endDate) {
+            throw new InvalidDateError();
+        }
+
         const now = new Date();
 
         const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);

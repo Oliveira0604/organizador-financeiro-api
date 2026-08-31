@@ -8,6 +8,7 @@ import type { User } from "@/repositories/user-repository";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
+import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let categoryRepository: InMemoryCategoryRepository;
 let incomeRepository: InMemoryIncomeRepository;
@@ -82,6 +83,26 @@ describe("Get Total By Category Id Use Case", () => {
 
         expect(firstCategoryTotal.total).toEqual(new Decimal(20000));
         expect(secondCategoryTotal.total).toEqual(new Decimal(10000));
+    });
+
+    it("should return the category total amont from current month if the range of date is not provided", async () => {
+        const categoryTotal = await getTotalByCategoryIdUseCase.execute({
+            userId: user.id,
+            categoryId: firstCategory.id,
+        });
+
+        expect(categoryTotal.total).toEqual(new Decimal(20000));
+    });
+
+    it("should not return the category total amount if start date is greater than end date", async () => {
+        await expect(
+            getTotalByCategoryIdUseCase.execute({
+                userId: user.id,
+                categoryId: firstCategory.id,
+                startDate: new Date(2026, 7, 31),
+                endDate: new Date(2026, 7, 1)
+            })
+        ).rejects.toBeInstanceOf(InvalidDateError);
     });
 
     it("should not get the total if the user doesn't exist", async () => {
