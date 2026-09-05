@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GetTotalByCategoryIdUseCase } from "./get-total-by-category-id-use-case";
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
@@ -17,21 +17,23 @@ describe("Get Total By Category Id Use Case", () => {
         expenseRepository = new InMemoryExpenseRepository();
         categoryRepository = new InMemoryCategoryRepository();
         getTotalByCategoryIdUseCase = new GetTotalByCategoryIdUseCase(expenseRepository, categoryRepository);
+        vi.useFakeTimers();
 
         category = await categoryRepository.create({
             name: "supermarket",
             userId: "user-01"
         });
 
-    });
+        vi.setSystemTime(new Date(2026, 7, 3));
 
-    it("should be able to get user total amount by category id", async () => {
         await expenseRepository.create({
             title: "food",
             amount: new Decimal(100),
             categoryId: category.id,
             userId: "user-01",
         });
+
+        vi.setSystemTime(new Date(2026, 7, 7));
 
         await expenseRepository.create({
             title: "cleaning products",
@@ -40,12 +42,34 @@ describe("Get Total By Category Id Use Case", () => {
             userId: "user-01",
         });
 
+        vi.setSystemTime(new Date(2026, 7, 20));
+
         await expenseRepository.create({
             title: "bread",
             amount: new Decimal(6.79),
             categoryId: category.id,
             userId: "user-01",
         });
+
+    });
+
+    afterEach(() => {
+        vi.useRealTimers();
+    });
+
+    it("should be able to get user total amount by category id in the provided range of date", async () => {
+
+        const { total } = await getTotalByCategoryIdUseCase.execute({
+            userId: "user-01",
+            categoryId: category.id,
+            startDate: new Date(2026, 7, 1),
+            endDate: new Date(2026, 7, 31)
+        });
+
+        expect(total).toEqual(new Decimal(306.79));
+    });
+
+    it("should get the expenses from current month if the range of date is not provided", async () => {
         const { total } = await getTotalByCategoryIdUseCase.execute({
             userId: "user-01",
             categoryId: category.id
@@ -86,15 +110,9 @@ describe("Get Total By Category Id Use Case", () => {
         });
 
         await expenseRepository.create({
-            title: "supermarket",
+            title: "shopping mall",
             amount: new Decimal(500),
-            categoryId: category.id,
-            userId: "user-01"
-        });
-        await expenseRepository.create({
-            title: "supermarket",
-            amount: new Decimal(100),
-            categoryId: category.id,
+            categoryId: secondCategory.id,
             userId: "user-01"
         });
 
@@ -103,7 +121,7 @@ describe("Get Total By Category Id Use Case", () => {
             categoryId: category.id
         });
 
-        expect(total).toEqual(new Decimal(600));
+        expect(total).toEqual(new Decimal(306.79));
     });
 
     it("should return 0 if the category exists but doesn't have any amount", async () => {

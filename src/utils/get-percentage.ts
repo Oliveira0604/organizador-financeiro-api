@@ -5,5 +5,5 @@ export function getPercentage(userTotal: Decimal, categoryTotal: Decimal): Decim
         return new Decimal(0);
     }
 
-    return categoryTotal.div(userTotal).mul(100);
+    return categoryTotal.div(userTotal).mul(100).floor();
 }

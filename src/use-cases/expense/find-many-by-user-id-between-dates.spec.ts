@@ -4,6 +4,7 @@ import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-by-user-id-betw
 import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import type { User } from "@/repositories/user-repository";
+import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let expenseRepository: InMemoryExpenseRepository;
 let userRepository: InMemoryUserRepository;
@@ -81,6 +82,28 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(expenses[1]?.paidAt).toEqual(new Date(2026, 7, 10));
         expect(expenses[0]?.userId).toEqual(user.id);
         expect(expenses[1]?.userId).toEqual(user.id);
+    });
+
+    it("should get the expenses from the current month if the range of date was not provided", async () => {
+        const { expenses } = await findManyByUserIdBetweenDates.execute({
+            userId: user.id,
+        });
+
+        expect(expenses).toHaveLength(2);
+        expect(expenses[0]?.paidAt).toEqual(new Date(2026, 7, 5));
+        expect(expenses[1]?.paidAt).toEqual(new Date(2026, 7, 10));
+        expect(expenses[0]?.userId).toEqual(user.id);
+        expect(expenses[1]?.userId).toEqual(user.id);
+    });
+
+    it("shoul not get the expenses if the start date is greater than end date", async () => {
+        await expect(
+            findManyByUserIdBetweenDates.execute({
+                userId: user.id,
+                startDate: new Date(2026, 7, 31),
+                endDate: new Date(2026, 7, 1)
+            })
+        ).rejects.toBeInstanceOf(InvalidDateError);
     });
 
     it("should not get the expenses from another person", async () => {

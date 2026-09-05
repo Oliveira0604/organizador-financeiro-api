@@ -1,3 +1,4 @@
+import { InvalidDateError } from "@/errors/invalid-date-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
@@ -32,6 +33,10 @@ export class GetTotalByCategoryIdUseCase {
 
         const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
         const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        if (resolvedStartDate > resolvedEndDate) {
+            throw new InvalidDateError();
+        }
 
         const category = await this.categoryRepository.findById(categoryId);
 
