@@ -4,7 +4,7 @@ export type CreateCategoryData = {
 }
 
 export type UpdateCategoryData = {
-    name: string,
+    name?: string,
 }
 
 export type Category = {
