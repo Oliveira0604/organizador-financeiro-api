@@ -10,9 +10,10 @@ export type UpdateCategoryData = {
 export type Category = {
     id: string,
     name: string,
+    userId: string
     createdAt: Date | null
     updatedAt: Date | null
-    userId: string
+    deletedAt: Date | null
 }
 
 export interface CategoryRepository {

@@ -55,6 +55,9 @@ export class InMemoryUserRepository implements UserRepository {
     async delete(id: string) {
         const user = this.items.find((item) => item.id === id);
 
-        user!.deletedAt = new Date();
+        if (user) {
+            user.deletedAt = new Date();
+        }
+
     }
 }

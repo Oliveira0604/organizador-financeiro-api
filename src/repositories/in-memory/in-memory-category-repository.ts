@@ -11,7 +11,8 @@ export class InMemoryCategoryRepository implements CategoryRepository {
             name: data.name,
             userId: data.userId,
             createdAt: null,
-            updatedAt: null
+            updatedAt: null,
+            deletedAt: null
         };
 
         this.items.push(category);
@@ -52,8 +53,10 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     }
 
     async delete(id: string) {
-        const categoryIndex = this.items.findIndex((item) => item.id === id);
+        const category = this.items.find((item) => item.id === id);
 
-        this.items.splice(categoryIndex, 1);
+        if (category) {
+            category.deletedAt = new Date();
+        }
     }
 }
