@@ -120,11 +120,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return totalExpense._sum.amount ?? new Decimal(0);
     }
 
-    async update(id: string, userId: string, data: UpdateExpenseData) {
+    async update(id: string, data: UpdateExpenseData) {
         const updatedExpense = await prisma.expense.update({
             where: {
                 id,
-                userId
             },
             data,
         });
@@ -133,11 +132,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
 
     }
 
-    async delete(id: string, userId: string) {
+    async delete(id: string) {
         await prisma.expense.update({
             where: {
                 id,
-                userId
             },
             data: {
                 deletedAt: new Date()

@@ -11,7 +11,7 @@ export type Category = {
     id: string,
     name: string,
     userId: string
-    createdAt: Date | null
+    createdAt: Date
     updatedAt: Date | null
     deletedAt: Date | null
 }

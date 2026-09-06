@@ -16,7 +16,7 @@ interface UpdateExpenseUseCaseRequest {
 }
 
 interface UpdateExpenseUseCaseResponse {
-    expense: Expense
+    expense: Expense | null
 }
 
 export class UpdateExpenseUseCase {

@@ -18,7 +18,7 @@ interface UpdateIncomeUseCaseRequest {
 }
 
 interface UpdateIncomeUseCaseResponse {
-    income: Income
+    income: Income | null
 }
 
 export class UpdateIncomeUseCase {

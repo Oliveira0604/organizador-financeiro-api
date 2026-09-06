@@ -93,6 +93,10 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
     async update(id: string, data: UpdateExpenseData) {
         const expense = this.items.find((item) => item.id === id)!;
 
+        if (!expense) {
+            return null;
+        }
+
         Object.assign(expense, data);
 
         return expense;
