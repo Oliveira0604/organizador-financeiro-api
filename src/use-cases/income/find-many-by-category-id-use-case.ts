@@ -30,14 +30,14 @@ export class FindManyByCategoryIdUseCase {
         endDate
     }: FindManyByCategoryIdUseCaseRequest): Promise<FindManyByCategoryIdUseCaseResponse> {
 
-        if (startDate && endDate && startDate > endDate) {
-            throw new InvalidDateError();
-        }
-
         const now = new Date();
 
         const resolvedStartDate = startDate ?? new Date(now.getFullYear(), now.getMonth(), 1);
         const resolvedEndDate = endDate ?? new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        if (resolvedStartDate > resolvedEndDate) {
+            throw new InvalidDateError();
+        }
 
         const user = await this.userRepository.findById(userId);
 
