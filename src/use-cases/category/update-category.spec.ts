@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { UpdateCategoryUseCase } from "./update-category-use-case";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Category } from "@/repositories/category-repository";
+import { InvalidStringError } from "@/errors/invalid-string-error";
 
 let categoryRepository: InMemoryCategoryRepository;
 let updateCategoryUseCase: UpdateCategoryUseCase;
@@ -44,7 +45,6 @@ describe("Update Category Use Case", () => {
     });
 
     it("should not update the category name if the user id is different", async () => {
-
         await expect(
             updateCategoryUseCase.execute({
                 id: category.id,
@@ -52,5 +52,15 @@ describe("Update Category Use Case", () => {
                 name: "updated name"
             })
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
+    });
+
+    it("should not update the category name if it is only space", async () => {
+        await expect(
+            updateCategoryUseCase.execute({
+                id: category.id,
+                userId: "user-01",
+                name: " "
+            })
+        ).rejects.toBeInstanceOf(InvalidStringError);
     });
 });
