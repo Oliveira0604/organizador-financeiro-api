@@ -1,11 +1,11 @@
 export interface HttpRequest {
-    body?: unknown,
-    params?: unknown,
-    query?: unknown,
+    body?: unknown
+    params?: unknown
+    query?: unknown
     headers?: unknown
 }
 
 export interface HttpResponse {
-    statusCode: number,
+    statusCode: number
     body?: unknown
 }
