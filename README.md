@@ -5,14 +5,16 @@ API backend para um agente financeiro integrado ao WhatsApp.
 ## Sobre o projeto
 
 Projeto pessoal desenvolvido para praticar desenvolvimento backend
-com Node.js e TypeScript, aplicando princípios de Clean Architecture,
-separação de responsabilidades e testes automatizados.
+com Node.js e TypeScript, aplicando uma arquitetura em camadas
+inspirada em Clean Architecture, separação de responsabilidades
+e testes automatizados.
 
 ## Tecnologias
 
 - Node.js
 - TypeScript
 - Fastify
+- Zod
 - Prisma
 - PostgreSQL
 - Vitest
@@ -20,8 +22,12 @@ separação de responsabilidades e testes automatizados.
 
 ## Arquitetura
 
-Breve explicação de como Controllers, Use Cases e Repositories
-estão organizados e qual é a responsabilidade de cada camada.
+O projeto segue uma arquitetura em camadas, com separação entre controllers, use cases e repositories.
+
+- Os **controllers** são responsáveis por orquestrar as requisições HTTP: validam os dados de entrada (com Zod) e chamam o use case correspondente.
+- Os **use cases** são responsáveis pelas regras de negócio da aplicação, recebendo dados já validados pelo controller.
+- Os **repositories** são responsáveis pela abstração de acesso aos dados, permitindo trocar a implementação (ex: Prisma, in-memory) sem impactar as demais camadas.
+- As **factories** são responsáveis por montar e injetar as dependências de cada controller (repository → use case → controller).
 
 ## RFs 
 - [ x ] O sistema deve ser capaz de cadastrar um usuário
