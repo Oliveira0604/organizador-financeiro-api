@@ -25,7 +25,9 @@ export class CreateUserController implements Controller {
 
         return {
             statusCode: 201,
-            body: { user }
+            body: {
+                user
+            }
         };
     }
 
