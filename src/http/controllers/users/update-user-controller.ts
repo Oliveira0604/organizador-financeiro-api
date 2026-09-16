@@ -2,14 +2,15 @@ import type { UpdateUserUseCase } from "@/use-cases/user/update-user-use-case";
 import type { Controller } from "../controller";
 import z from "zod";
 import type { HttpRequest, HttpResponse } from "../http";
+import { normalizePhoneNumber } from "@/utils/normalizePhoneNumber";
 
 const paramsSchema = z.object({
     id: z.uuid(),
 });
 
 const updateUserSchema = z.object({
-    name: z.string().optional(),
-    phoneNumber: z.string().optional()
+    name: z.string().trim().min(1).optional(),
+    phoneNumber: z.string().trim().min(15).optional()
 });
 
 export class UpdateUserController implements Controller {
@@ -24,7 +25,9 @@ export class UpdateUserController implements Controller {
         const updatedUser = await this.updateUserUseCase.execute({
             userId: id,
             ...(name !== undefined && { name }),
-            ...(phoneNumber !== undefined && { phoneNumber })
+            ...(phoneNumber !== undefined && {
+                phoneNumber: normalizePhoneNumber(phoneNumber)
+            })
         });
 
         return {
