@@ -15,7 +15,6 @@ export class CreateUserController implements Controller {
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
 
-
         const { name, phoneNumber } = createUserSchema.parse(request.body);
 
 
