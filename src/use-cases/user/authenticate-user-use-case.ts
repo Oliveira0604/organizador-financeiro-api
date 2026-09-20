@@ -1,6 +1,7 @@
+import type { HashComparer } from "@/cryptography/hash-comparer";
 import { InvalidCredentialsError } from "@/errors/invalid-credentials-error";
 import type { User, UserRepository } from "@/repositories/user-repository";
-import { compare } from "bcryptjs";
+import type { TokenGenerator } from "@/tokens/token-generator-";
 
 interface AuthenticateUserUseCaseRequest {
     phoneNumber: string
@@ -8,12 +9,15 @@ interface AuthenticateUserUseCaseRequest {
 }
 
 interface AuthenticateUserUseCaseResponse {
-    user: User
+    user: User,
+    token: string
 }
 
 export class AuthenticateUserUseCase {
     constructor(
-        private userRepository: UserRepository
+        private userRepository: UserRepository,
+        private hashComparer: HashComparer,
+        private tokenGenerator: TokenGenerator
     ) { }
 
     async execute({
@@ -27,16 +31,21 @@ export class AuthenticateUserUseCase {
             throw new InvalidCredentialsError();
         }
 
-        const doesThePasswordMatch = await compare(password, user.passwordHash);
+        const doesThePasswordMatch = await this.hashComparer.compare(password, user.passwordHash);
 
         if (!doesThePasswordMatch) {
             throw new InvalidCredentialsError();
         }
 
+        const token = await this.tokenGenerator.sign({
+            sub: user.id
+        });
+
         return {
-            user
+            user,
+            token
         };
     }
 }
 
-//TODO: Create the test for this use case.
+//TODO: Create the interface TokenService (in services or cryptography - need to search to learn what can be considered a service) and create the fastify-token-service which will generate the token

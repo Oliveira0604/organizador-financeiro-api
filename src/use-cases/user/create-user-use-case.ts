@@ -1,6 +1,6 @@
 import type { User, UserRepository } from "@/repositories/user-repository";
 import { UserAlreadyExistsError } from "@/errors/user-already-exists-error";
-import { hash } from "bcryptjs";
+import type { HashGenerator } from "@/cryptography/hash-generator";
 
 interface CreateUserUseCaseRequest {
     name: string,
@@ -14,7 +14,8 @@ interface CreateUserUseCaseResponse {
 
 export class CreateUserUseCase {
     constructor(
-        private userRepository: UserRepository
+        private userRepository: UserRepository,
+        private hashGenerator: HashGenerator
     ) { }
 
     async execute({
@@ -23,7 +24,7 @@ export class CreateUserUseCase {
         password
     }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
 
-        const passwordHash = await hash(password, 6);
+        const passwordHash = await this.hashGenerator.hash(password);
 
         const doesTheUserAlreadyExists = await this.userRepository.findByPhoneNumber(phoneNumber);
 

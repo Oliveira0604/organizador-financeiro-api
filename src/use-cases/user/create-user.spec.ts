@@ -2,14 +2,27 @@ import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-
 import { expect, describe, it, beforeEach } from "vitest";
 import { CreateUserUseCase } from "./create-user-use-case";
 import { UserAlreadyExistsError } from "@/errors/user-already-exists-error";
+import { FakeHasher } from "@/cryptography/fake-hasher";
 
 let userRepository: InMemoryUserRepository;
+let hash: FakeHasher;
 let createUserUseCase: CreateUserUseCase;
 
 describe("Create User use case", () => {
     beforeEach(() => {
         userRepository = new InMemoryUserRepository();
-        createUserUseCase = new CreateUserUseCase(userRepository);
+        hash = new FakeHasher();
+        createUserUseCase = new CreateUserUseCase(userRepository, hash);
+    });
+
+    it("should hash a password before saving it", async () => {
+        const user = await userRepository.create({
+            name: "Nathan",
+            phoneNumber: "+55 11 9999-9999",
+            passwordHash: await hash.hash("123456")
+        });
+
+        expect(user.passwordHash).toEqual("123456-hashed");
     });
 
     it("should be able create a user", async () => {
