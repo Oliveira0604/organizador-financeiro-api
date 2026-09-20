@@ -1,9 +1,11 @@
 import type { User, UserRepository } from "@/repositories/user-repository";
 import { UserAlreadyExistsError } from "@/errors/user-already-exists-error";
+import { hash } from "bcryptjs";
 
 interface CreateUserUseCaseRequest {
     name: string,
-    phoneNumber: string
+    phoneNumber: string,
+    password: string
 }
 
 interface CreateUserUseCaseResponse {
@@ -17,8 +19,12 @@ export class CreateUserUseCase {
 
     async execute({
         name,
-        phoneNumber
+        phoneNumber,
+        password
     }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
+
+        const passwordHash = await hash(password, 6);
+
         const doesTheUserAlreadyExists = await this.userRepository.findByPhoneNumber(phoneNumber);
 
         if (doesTheUserAlreadyExists) {
@@ -27,7 +33,8 @@ export class CreateUserUseCase {
 
         const user = await this.userRepository.create({
             name,
-            phoneNumber
+            phoneNumber,
+            passwordHash
         });
 
         return {

@@ -14,8 +14,9 @@ describe("Create User use case", () => {
 
     it("should be able create a user", async () => {
         const { user } = await createUserUseCase.execute({
-            name: "John doe",
-            phoneNumber: "+55 11 9999-9999"
+            name: "Nathan",
+            phoneNumber: "+55 11 9999-9999",
+            password: "123456"
         });
 
         expect(user.id).toEqual(expect.any(String));
@@ -25,13 +26,15 @@ describe("Create User use case", () => {
         const phoneNumber = "+55 11 9999-9999";
 
         await userRepository.create({
-            name: "John Doe",
+            name: "Nathan",
             phoneNumber,
+            passwordHash: "123456"
         });
 
         await expect(() => createUserUseCase.execute({
-            name: "John Doe",
-            phoneNumber
+            name: "Nathan",
+            phoneNumber,
+            password: "123456"
         })).rejects.toBeInstanceOf(UserAlreadyExistsError);
     });
 

@@ -10,6 +10,7 @@ export class InMemoryUserRepository implements UserRepository {
             id: randomUUID(),
             name: data.name,
             phoneNumber: data.phoneNumber,
+            passwordHash: data.passwordHash,
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: null
