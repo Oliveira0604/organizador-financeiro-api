@@ -4,6 +4,7 @@ import { ZodError, z } from "zod";
 import { env } from "./env";
 import { AppError } from "./errors/app-error";
 import fastifyJwt from "@fastify/jwt";
+import { JwtError } from "./errors/jwt-error";
 
 export const app = fastify();
 
@@ -21,6 +22,12 @@ app.setErrorHandler((error, _, reply) => {
     }
 
     if (error instanceof AppError) {
+        return reply
+            .status(error.statusCode)
+            .send({ message: error.message });
+    }
+
+    if (error instanceof JwtError) {
         return reply
             .status(error.statusCode)
             .send({ message: error.message });

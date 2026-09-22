@@ -3,6 +3,9 @@ export interface HttpRequest {
     params?: unknown
     query?: unknown
     headers?: unknown
+    user?: {
+        id: string
+    }
 }
 
 export interface HttpResponse {

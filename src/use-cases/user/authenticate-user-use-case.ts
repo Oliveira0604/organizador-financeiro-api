@@ -47,5 +47,3 @@ export class AuthenticateUserUseCase {
         };
     }
 }
-
-//TODO: Create the interface TokenService (in services or cryptography - need to search to learn what can be considered a service) and create the fastify-token-service which will generate the token

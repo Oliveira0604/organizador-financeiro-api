@@ -11,6 +11,7 @@ const updateCategorySchema = z.object({
     name: z.string().trim().min(1)
 });
 
+
 export class UpdateCategoryController implements Controller {
     constructor(
         private updateCategoryUseCase: UpdateCategoryUseCase
@@ -19,6 +20,7 @@ export class UpdateCategoryController implements Controller {
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { categoryId } = paramsSchema.parse(request.params);
         const { name } = updateCategorySchema.parse(request.body);
+        const userId = request.user!.id;
 
         const updatedCategory = await this.updateCategoryUseCase.execute({
             id: categoryId,
