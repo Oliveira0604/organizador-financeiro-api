@@ -38,5 +38,3 @@ export class UpdateUserController implements Controller {
         };
     }
 }
-
-//TODO: Fix the optional part (is not accepting the optional from zod because my interface is optional or string and zod is optional or undefined)

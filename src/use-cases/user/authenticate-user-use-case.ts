@@ -1,6 +1,6 @@
 import type { HashComparer } from "@/cryptography/hash-comparer";
 import { InvalidCredentialsError } from "@/errors/invalid-credentials-error";
-import type { User, UserRepository } from "@/repositories/user-repository";
+import type { UserRepository } from "@/repositories/user-repository";
 import type { TokenGenerator } from "@/tokens/token-generator-";
 
 interface AuthenticateUserUseCaseRequest {
@@ -9,7 +9,6 @@ interface AuthenticateUserUseCaseRequest {
 }
 
 interface AuthenticateUserUseCaseResponse {
-    user: User,
     token: string
 }
 
@@ -42,7 +41,6 @@ export class AuthenticateUserUseCase {
         });
 
         return {
-            user,
             token
         };
     }

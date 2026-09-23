@@ -53,6 +53,18 @@ export class InMemoryUserRepository implements UserRepository {
         return user;
     }
 
+    async updatePassword(id: string, passwordHash: string) {
+        const user = this.items.find((item) => item.id === id);
+
+        if (!user) {
+            return null;
+        }
+
+        user.passwordHash = passwordHash;
+
+        return user;
+    }
+
     async delete(id: string) {
         const user = this.items.find((item) => item.id === id);
 

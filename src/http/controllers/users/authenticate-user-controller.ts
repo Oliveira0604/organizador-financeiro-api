@@ -16,9 +16,16 @@ export class AuthenticateUserController implements Controller {
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { phoneNumber, password } = authenticateUserSchema.parse(request.body);
 
-        const user = await this.authenticateUserUseCase.execute({
+        const { token } = await this.authenticateUserUseCase.execute({
             phoneNumber,
             password
         });
+
+        return {
+            statusCode: 200,
+            body: {
+                token
+            }
+        };
     }
 }

@@ -8,7 +8,12 @@ export function fastifyAdapter(controller: Controller) {
             body: request.body,
             params: request.params,
             query: request.query,
-            headers: request.headers
+            headers: request.headers,
+            ...(request.user && {
+                user: {
+                    id: request.user.sub
+                }
+            })
         };
 
         const httpResponse = await controller.handle(httpRequest);
