@@ -1,19 +1,20 @@
 export type CreateUserData = {
     name: string,
     phoneNumber: string,
-    passwordHash: string
+    passwordHash?: string | null
 }
 
 export type UpdateUserData = {
     name?: string,
     phoneNumber?: string,
+    passwordHash?: string
 }
 
 export type User = {
     id: string,
     name: string,
     phoneNumber: string,
-    passwordHash: string,
+    passwordHash: string | null,
     createdAt: Date,
     updatedAt: Date | null,
     deletedAt: Date | null

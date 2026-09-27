@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { CreateUserData, UpdateUserData, UserRepository } from "../user-repository";
-import type { User } from "@/generated/prisma/client";
+import type { User } from "@/repositories/user-repository";
 
 export class InMemoryUserRepository implements UserRepository {
     public items: User[] = [];
@@ -10,7 +10,7 @@ export class InMemoryUserRepository implements UserRepository {
             id: randomUUID(),
             name: data.name,
             phoneNumber: data.phoneNumber,
-            passwordHash: data.passwordHash,
+            passwordHash: data.passwordHash ?? null,
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: null

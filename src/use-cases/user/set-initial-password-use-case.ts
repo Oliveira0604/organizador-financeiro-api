@@ -38,8 +38,6 @@ export class SetInitialPasswordUseCase {
     }
 }
 
-//TODO: Create the test coverage for this use case 
-
 // TODO: Add two-step verification (e.g. OTP via WhatsApp) before allowing
 // password creation. Currently, anyone who knows a user's phone number
 // could set that user's initial password, since there's no proof of identity.

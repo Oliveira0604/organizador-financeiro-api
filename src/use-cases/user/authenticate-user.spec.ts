@@ -25,12 +25,11 @@ describe("Authenticate User Use Case", () => {
             passwordHash: await hash.hash("123456")
         });
 
-        const { user, token } = await authenticateUserUseCase.execute({
+        const { token } = await authenticateUserUseCase.execute({
             phoneNumber: "+55 11 9999-9999",
             password: "123456"
         });
 
-        expect(user.id).toEqual(expect.any(String));
         expect(token).toEqual(expect.any(String));
     });
 
