@@ -23,7 +23,7 @@ export class CreateCategoryController implements Controller {
 
         const { name } = createCategoryBodySchema.parse(request.body);
 
-        const category = await this.createCategoryUseCase.execute({
+        const { category } = await this.createCategoryUseCase.execute({
             userId: id,
             name
         });
@@ -31,7 +31,8 @@ export class CreateCategoryController implements Controller {
         return {
             statusCode: 201,
             body: {
-                category
+                id: category.id,
+                name: category.name
             }
         };
     }

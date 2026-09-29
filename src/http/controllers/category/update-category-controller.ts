@@ -4,7 +4,7 @@ import z from "zod";
 import type { Controller } from "../controller";
 
 const paramsSchema = z.object({
-    categoryId: z.string(),
+    id: z.string(),
 });
 
 const updateCategorySchema = z.object({
@@ -18,12 +18,12 @@ export class UpdateCategoryController implements Controller {
     ) { }
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
-        const { categoryId } = paramsSchema.parse(request.params);
+        const { id } = paramsSchema.parse(request.params);
         const { name } = updateCategorySchema.parse(request.body);
         const userId = request.user!.id;
 
-        const updatedCategory = await this.updateCategoryUseCase.execute({
-            id: categoryId,
+        const { category } = await this.updateCategoryUseCase.execute({
+            id,
             userId,
             name
         });
@@ -31,7 +31,8 @@ export class UpdateCategoryController implements Controller {
         return {
             statusCode: 200,
             body: {
-                updatedCategory
+                id: category!.id,
+                name: category!.name
             }
         };
     }

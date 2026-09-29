@@ -26,11 +26,13 @@ export class AuthenticateUserUseCase {
 
         const user = await this.userRepository.findByPhoneNumber(phoneNumber);
 
+        console.log(user!.id);
+
         if (!user) {
             throw new InvalidCredentialsError();
         }
 
-        const doesThePasswordMatch = await this.hashComparer.compare(password, user.passwordHash);
+        const doesThePasswordMatch = await this.hashComparer.compare(password, user.passwordHash!);
 
         if (!doesThePasswordMatch) {
             throw new InvalidCredentialsError();

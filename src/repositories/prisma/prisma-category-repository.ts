@@ -1,4 +1,3 @@
-
 import type { Prisma } from "@/generated/prisma/client";
 import type { CategoryRepository, CreateCategoryData } from "../category-repository";
 import { prisma } from "@/lib/prisma";
@@ -56,9 +55,12 @@ export class PrismaCategoryRepository implements CategoryRepository {
     }
 
     async delete(id: string) {
-        await prisma.category.delete({
+        await prisma.category.update({
             where: {
                 id,
+            },
+            data: {
+                deletedAt: new Date()
             }
         });
     }

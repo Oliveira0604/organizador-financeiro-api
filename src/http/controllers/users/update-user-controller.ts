@@ -10,7 +10,8 @@ const paramsSchema = z.object({
 
 const updateUserSchema = z.object({
     name: z.string().trim().min(1).optional(),
-    phoneNumber: z.string().trim().min(15).optional()
+    phoneNumber: z.string().trim().min(15).optional(),
+    password: z.string().min(8).optional()
 });
 
 export class UpdateUserController implements Controller {
@@ -20,20 +21,22 @@ export class UpdateUserController implements Controller {
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { id } = paramsSchema.parse(request.params);
-        const { name, phoneNumber } = updateUserSchema.parse(request.body);
+        const { name, phoneNumber, password } = updateUserSchema.parse(request.body);
 
         const updatedUser = await this.updateUserUseCase.execute({
             userId: id,
             ...(name !== undefined && { name }),
             ...(phoneNumber !== undefined && {
                 phoneNumber: normalizePhoneNumber(phoneNumber)
-            })
+            }),
+            ...(password !== undefined && { password })
         });
 
         return {
             statusCode: 200,
             body: {
-                updatedUser
+                id: updatedUser.user!.id,
+                name: updatedUser.user!.name
             }
         };
     }

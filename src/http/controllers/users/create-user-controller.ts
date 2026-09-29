@@ -6,7 +6,7 @@ import z from "zod";
 const createUserSchema = z.object({
     name: z.string(),
     phoneNumber: z.string(),
-    password: z.string().min(8)
+    password: z.string().min(8).optional()
 });
 
 export class CreateUserController implements Controller {
@@ -19,18 +19,18 @@ export class CreateUserController implements Controller {
         const { name, phoneNumber, password } = createUserSchema.parse(request.body);
 
 
-        const user = await this.createUserUseCase.execute({
+        const { user } = await this.createUserUseCase.execute({
             name,
             phoneNumber,
-            password
+            ...(password !== undefined && { password })
         });
 
         return {
             statusCode: 201,
             body: {
-                user
+                id: user.id,
+                name: user.name
             }
         };
     }
-
 }

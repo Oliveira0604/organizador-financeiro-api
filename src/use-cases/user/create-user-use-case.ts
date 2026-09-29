@@ -5,7 +5,7 @@ import type { HashGenerator } from "@/cryptography/hash-generator";
 interface CreateUserUseCaseRequest {
     name: string,
     phoneNumber: string,
-    password: string
+    password?: string
 }
 
 interface CreateUserUseCaseResponse {
@@ -24,7 +24,7 @@ export class CreateUserUseCase {
         password
     }: CreateUserUseCaseRequest): Promise<CreateUserUseCaseResponse> {
 
-        const passwordHash = await this.hashGenerator.hash(password);
+        const passwordHash = password ? await this.hashGenerator.hash(password) : null;
 
         const doesTheUserAlreadyExists = await this.userRepository.findByPhoneNumber(phoneNumber);
 
