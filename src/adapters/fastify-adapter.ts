@@ -9,6 +9,7 @@ export function fastifyAdapter(controller: Controller) {
             params: request.params,
             query: request.query,
             headers: request.headers,
+            cookies: request.cookies,
             ...(request.user && {
                 user: {
                     id: request.user.sub
@@ -17,6 +18,15 @@ export function fastifyAdapter(controller: Controller) {
         };
 
         const httpResponse = await controller.handle(httpRequest);
+
+        if (httpResponse.cookies) {
+            reply.setCookie(httpResponse.cookies.name, httpResponse.cookies.value, {
+                path: httpResponse.cookies.path,
+                secure: httpResponse.cookies.secure,
+                sameSite: httpResponse.cookies.sameSite,
+                httpOnly: httpResponse.cookies.httpOnly
+            });
+        }
 
         return reply
             .status(httpResponse.statusCode)

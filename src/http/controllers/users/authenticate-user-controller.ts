@@ -16,7 +16,7 @@ export class AuthenticateUserController implements Controller {
     async handle(request: HttpRequest): Promise<HttpResponse> {
         const { phoneNumber, password } = authenticateUserSchema.parse(request.body);
 
-        const { token } = await this.authenticateUserUseCase.execute({
+        const { acessToken, refreshToken } = await this.authenticateUserUseCase.execute({
             phoneNumber,
             password
         });
@@ -24,7 +24,15 @@ export class AuthenticateUserController implements Controller {
         return {
             statusCode: 200,
             body: {
-                token
+                acessToken,
+            },
+            cookies: {
+                name: "refreshToken",
+                value: refreshToken,
+                path: "/",
+                secure: true,
+                sameSite: "lax",
+                httpOnly: true
             }
         };
     }

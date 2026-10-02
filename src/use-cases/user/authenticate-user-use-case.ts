@@ -9,7 +9,8 @@ interface AuthenticateUserUseCaseRequest {
 }
 
 interface AuthenticateUserUseCaseResponse {
-    token: string
+    acessToken: string
+    refreshToken: string
 }
 
 export class AuthenticateUserUseCase {
@@ -26,8 +27,6 @@ export class AuthenticateUserUseCase {
 
         const user = await this.userRepository.findByPhoneNumber(phoneNumber);
 
-        console.log(user!.id);
-
         if (!user) {
             throw new InvalidCredentialsError();
         }
@@ -38,12 +37,17 @@ export class AuthenticateUserUseCase {
             throw new InvalidCredentialsError();
         }
 
-        const token = await this.tokenGenerator.sign({
+        const acessToken = await this.tokenGenerator.signAccessToken({
+            sub: user.id
+        });
+
+        const refreshToken = await this.tokenGenerator.signRefreshToken({
             sub: user.id
         });
 
         return {
-            token
+            acessToken,
+            refreshToken
         };
     }
 }

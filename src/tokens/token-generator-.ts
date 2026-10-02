@@ -1,3 +1,4 @@
 export interface TokenGenerator {
-    sign(payload: { sub: string }): Promise<string>
+    signAccessToken(payload: { sub: string }): Promise<string>
+    signRefreshToken(payload: { sub: string }): Promise<string>
 }
