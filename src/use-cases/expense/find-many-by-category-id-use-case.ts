@@ -9,7 +9,8 @@ interface FindManyByCategoryIdUseCaseRequest {
     categoryId: string,
     userId: string,
     startDate?: Date,
-    endDate?: Date
+    endDate?: Date,
+    page: number
 }
 
 interface FindManyByCategoryIdUseCaseResponse {
@@ -27,7 +28,8 @@ export class FindManyByCategoryIdUseCase {
         categoryId,
         userId,
         startDate,
-        endDate
+        endDate,
+        page
     }: FindManyByCategoryIdUseCaseRequest): Promise<FindManyByCategoryIdUseCaseResponse> {
 
         const now = new Date();
@@ -55,7 +57,7 @@ export class FindManyByCategoryIdUseCase {
             throw new NotAllowedError();
         }
 
-        const expenses = await this.expenseRepository.findManyByCategoryId(category.id, resolvedStartDate, resolvedEndDate);
+        const expenses = await this.expenseRepository.findManyByCategoryId(category.id, resolvedStartDate, resolvedEndDate, page);
 
         return {
             expenses,

@@ -64,7 +64,8 @@ describe("Find Many By Category Id Use Case", () => {
             userId: user.id,
             categoryId: category.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -82,7 +83,8 @@ describe("Find Many By Category Id Use Case", () => {
     it("should get the expenses from current month if the range of date is not provided", async () => {
         const { expenses } = await findManyByCategoryId.execute({
             userId: user.id,
-            categoryId: category.id
+            categoryId: category.id,
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -103,7 +105,8 @@ describe("Find Many By Category Id Use Case", () => {
                 userId: user.id,
                 categoryId: category.id,
                 startDate: new Date(2026, 7, 31),
-                endDate: new Date(2026, 7, 1)
+                endDate: new Date(2026, 7, 1),
+                page: 1
             })
         ).rejects.toBeInstanceOf(InvalidDateError);
     });
@@ -112,7 +115,8 @@ describe("Find Many By Category Id Use Case", () => {
         await expect(
             findManyByCategoryId.execute({
                 categoryId: "non-existent",
-                userId: user.id
+                userId: user.id,
+                page: 1
             })
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
@@ -126,7 +130,8 @@ describe("Find Many By Category Id Use Case", () => {
         await expect(
             findManyByCategoryId.execute({
                 categoryId: category.id,
-                userId: secondUser.id
+                userId: secondUser.id,
+                page: 1
             })
         ).rejects.toBeInstanceOf(NotAllowedError);
     });
@@ -146,7 +151,8 @@ describe("Find Many By Category Id Use Case", () => {
 
         const { expenses } = await findManyByCategoryId.execute({
             categoryId: category.id,
-            userId: user.id
+            userId: user.id,
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);

@@ -27,7 +27,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
-    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
         const dateExpenses = await prisma.expense.findMany({
             where: {
                 userId,
@@ -37,16 +37,17 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 },
                 deletedAt: null
             },
-
+            take: 20,
+            skip: (page - 1) * 20,
             orderBy: {
-                paidAt: "desc"
+                paidAt: "asc"
             }
         });
 
         return dateExpenses;
     }
 
-    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date) {
+    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date, page: number) {
         const expenses = await prisma.expense.findMany({
             where: {
                 categoryId,
@@ -56,8 +57,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
                 },
                 deletedAt: null
             },
+            take: 20,
+            skip: (page - 1) * 20,
             orderBy: {
-                paidAt: "desc"
+                paidAt: "asc"
             }
         });
 

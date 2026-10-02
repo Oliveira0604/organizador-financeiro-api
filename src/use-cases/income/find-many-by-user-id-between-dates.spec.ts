@@ -64,7 +64,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
             userId: user.id,
             startDate,
-            endDate
+            endDate,
+            page: 1
         });
 
         expect(incomes).toHaveLength(3);
@@ -88,6 +89,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
     it("should return the incomes in the current month if the range of dates are not provided", async () => {
         const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
             userId: user.id,
+            page: 1
         });
 
         expect(incomes).toHaveLength(3);
@@ -113,7 +115,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
             findManyByUserIdBetweenDatesUseCase.execute({
                 userId: user.id,
                 startDate: new Date(2026, 7, 31),
-                endDate: new Date(2026, 7, 1)
+                endDate: new Date(2026, 7, 1),
+                page: 1
             })
         ).rejects.toBeInstanceOf(InvalidDateError);
     });
@@ -123,7 +126,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
             findManyByUserIdBetweenDatesUseCase.execute({
                 userId: "non-existent",
                 startDate,
-                endDate
+                endDate,
+                page: 1
             })
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
@@ -146,7 +150,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
             userId: secondUser.id,
             startDate,
-            endDate
+            endDate,
+            page: 1
         });
 
         expect(incomes).toHaveLength(1);
@@ -161,7 +166,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
             userId: user.id,
             startDate: new Date(2026, 6, 1),
-            endDate: new Date(2026, 6, 31)
+            endDate: new Date(2026, 6, 31),
+            page: 1
         });
 
         expect(incomes).toHaveLength(0);
@@ -180,7 +186,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { incomes } = await findManyByUserIdBetweenDatesUseCase.execute({
             userId: user.id,
             startDate,
-            endDate
+            endDate,
+            page: 1
         });
 
         expect(incomes).toHaveLength(3);

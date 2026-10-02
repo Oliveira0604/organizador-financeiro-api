@@ -74,7 +74,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { expenses } = await findManyByUserIdBetweenDates.execute({
             userId: user.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 30)
+            endDate: new Date(2026, 7, 30),
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -87,6 +88,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
     it("should get the expenses from the current month if the range of date was not provided", async () => {
         const { expenses } = await findManyByUserIdBetweenDates.execute({
             userId: user.id,
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -101,7 +103,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
             findManyByUserIdBetweenDates.execute({
                 userId: user.id,
                 startDate: new Date(2026, 7, 31),
-                endDate: new Date(2026, 7, 1)
+                endDate: new Date(2026, 7, 1),
+                page: 1
             })
         ).rejects.toBeInstanceOf(InvalidDateError);
     });
@@ -110,7 +113,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { expenses } = await findManyByUserIdBetweenDates.execute({
             userId: secondUser.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -129,7 +133,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { expenses } = await findManyByUserIdBetweenDates.execute({
             userId: user.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(expenses).toHaveLength(2);
@@ -140,7 +145,8 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         const { expenses } = await findManyByUserIdBetweenDates.execute({
             userId: user.id,
             startDate: new Date(2026, 8, 1),
-            endDate: new Date(2026, 8, 30)
+            endDate: new Date(2026, 8, 30),
+            page: 1
         });
 
         expect(expenses).toEqual([]);

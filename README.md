@@ -1,6 +1,7 @@
 # Organizador Financeiro
 
-API backend para um agente financeiro integrado ao WhatsApp.
+API REST para gerenciamento financeiro pessoal, desenvolvida com Node.js e TypeScript, com autenticação JWT, PostgreSQL, Prisma, validação de dados, regras de negócio e testes automatizados.
+
 
 ## Sobre o projeto
 
@@ -30,39 +31,33 @@ O projeto segue uma arquitetura em camadas, com separação entre controllers, u
 - As **factories** são responsáveis por montar e injetar as dependências de cada controller (repository → use case → controller).
 
 ## RFs 
-- [ x ] O sistema deve ser capaz de cadastrar um usuário
-- [ x ] O sistema deve ser capaz de atualizar dados de um usuário
-- [ x ] O sistema deve ser capaz de deletar um usuário
-- [ ] O sistema deve ser capaz de autenticar um usuário
-- [ x ] O sistema deve ser capaz de cadastrar rendas 
-- [] O sistema deve ser capaz de atualizar rendas 
-- [ x ] O sistema deve ser capaz de cadastrar uma despesa
-- [ x ] O sistema deve ser capaz de atualizar uma despesa
-- [ x ] O sistema deve ser capaz de remover uma despesa
-- [ x ] O sistema deve ser capaz de categorizar as despesas
-- [ x ] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
-- [ x ] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
-- [ ] O sistema deve ser capaz de definir limite de gastos para cada área de acordo com o usuário
-- [ ] O sistema deve ser capaz de dar dicas de economia
-- [ ] O sistema deve ser capaz de explicar entre renda fixa e renda variável
+- [x] O sistema deve ser capaz de cadastrar um usuário
+- [x] O sistema deve ser capaz de atualizar dados de um usuário
+- [x] O sistema deve ser capaz de deletar um usuário
+- [x] O sistema deve ser capaz de autenticar um usuário
+- [x] O sistema deve ser capaz de cadastrar rendas 
+- [x] O sistema deve ser capaz de atualizar rendas 
+- [x] O sistema deve ser capaz de cadastrar uma despesa
+- [x] O sistema deve ser capaz de atualizar uma despesa
+- [x] O sistema deve ser capaz de remover uma despesa
+- [x] O sistema deve ser capaz de categorizar as despesas
+- [x] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
+- [x] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
 - [ ] O sistema deve ser capaz de simular rendimento de um dinheiro investido à renda fixa
-- [ ] O sistema deve permitir consultar as despesas de um mês específico.
+- [x] O sistema deve permitir consultar as despesas de um mês específico.
 - [ ] O sistema deve ser capaz de mostrar um resumo financeiro mensal.
 
 ## RNs
-- [ x ] O usuário não pode se cadastrar com um número já existente
-- [ ] O usuário não pode cadastrar uma renda negativa
-- [ ] O usuário não deve ser capaz de cadastrar uma despesa com valor negativo
-- [ ] O usuário não deve ser capaz de definir um limite de gasto negativo
-- [ ] O usuário não pode atualizar a renda com valores negativos
-- [ ] O usuário não pode atualizar as despesas com valores negativos
-- [ ] O sistema não deve responder a nada que não seja do tópico financeiro
-- [ ] O sistema não pode induzir o usuário a por o dinheiro em um determinado investimento
+- [x] O usuário não pode se cadastrar com um email já existente
+- [x] O usuário não pode cadastrar uma renda negativa
+- [x] O usuário não deve ser capaz de cadastrar uma despesa com valor negativo
+- [x] O usuário não pode atualizar a renda com valores negativos
+- [x] O usuário não pode atualizar as despesas com valores negativos
 
 
 ## RNFs 
-- [ ] A senha do usuário deve estar criptografada
-- [ ] Os dados devem ser persistido em PostgreSQL
+- [x] A senha do usuário deve estar criptografada
+- [x] Os dados devem ser persistido em PostgreSQL
 - [ ] Os gastos devem estar paginados
-- [ ] No Whatsapp deve ser mostrado uma mensagem com os gastos um embaixo do outro representando os dias
-- [ ] A autenticação deve utilizar JWT
+- [ ] As despesas devem estar paginados
+- [x] A autenticação deve utilizar JWT

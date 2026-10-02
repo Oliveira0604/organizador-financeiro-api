@@ -32,19 +32,20 @@ export class InMemoryIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
         const userIncomes = this.items
             .filter((item) =>
                 item.userId === userId &&
                 item.receivedAt >= startDate &&
                 item.receivedAt < endDate
             )
-            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime());
+            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime())
+            .slice((page - 1) * 20, page * 20);
 
         return userIncomes;
     }
 
-    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date, page: number) {
         const categoryIncomes = this.items.
             filter((item) =>
                 item.userId === userId &&
@@ -52,7 +53,8 @@ export class InMemoryIncomeRepository implements IncomeRepository {
                 item.receivedAt >= startDate &&
                 item.receivedAt <= endDate
             )
-            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime());
+            .sort((firstIncome, secondIncome) => firstIncome.receivedAt.getTime() - secondIncome.receivedAt.getTime())
+            .slice((page - 1) * 20, page * 20);
 
         return categoryIncomes;
     }

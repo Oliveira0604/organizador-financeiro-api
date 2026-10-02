@@ -79,14 +79,16 @@ describe("Find Many By Category Id Use Case", () => {
             userId: user.id,
             categoryId: firstCategory.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         const { incomes: secondIncomes } = await findManyByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(incomes).toHaveLength(1);
@@ -108,11 +110,13 @@ describe("Find Many By Category Id Use Case", () => {
         const { incomes } = await findManyByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: firstCategory.id,
+            page: 1
         });
 
         const { incomes: secondIncomes } = await findManyByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
+            page: 1
         });
 
         expect(incomes).toHaveLength(1);
@@ -135,7 +139,8 @@ describe("Find Many By Category Id Use Case", () => {
                 userId: user.id,
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 31),
-                endDate: new Date(2026, 7, 1)
+                endDate: new Date(2026, 7, 1),
+                page: 1
             })
         ).rejects.toBeInstanceOf(InvalidDateError);
     });
@@ -146,7 +151,8 @@ describe("Find Many By Category Id Use Case", () => {
                 userId: "non-existent",
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 1),
-                endDate: new Date(2026, 7, 31)
+                endDate: new Date(2026, 7, 31),
+                page: 1
             })
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
@@ -157,7 +163,8 @@ describe("Find Many By Category Id Use Case", () => {
                 userId: user.id,
                 categoryId: "non-existent",
                 startDate: new Date(2026, 7, 1),
-                endDate: new Date(2026, 7, 31)
+                endDate: new Date(2026, 7, 31),
+                page: 1
             })
         ).rejects.toBeInstanceOf(ResourceNotFoundError);
     });
@@ -173,7 +180,8 @@ describe("Find Many By Category Id Use Case", () => {
                 userId: secondUser.id,
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 1),
-                endDate: new Date(2026, 7, 31)
+                endDate: new Date(2026, 7, 31),
+                page: 1
             })
         ).rejects.toBeInstanceOf(NotAllowedError);
     });
@@ -192,7 +200,8 @@ describe("Find Many By Category Id Use Case", () => {
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(incomes).toHaveLength(2);
@@ -218,7 +227,8 @@ describe("Find Many By Category Id Use Case", () => {
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),
-            endDate: new Date(2026, 7, 31)
+            endDate: new Date(2026, 7, 31),
+            page: 1
         });
 
         expect(incomes).toHaveLength(2);

@@ -36,7 +36,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return income;
     }
 
-    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
         const userIncomes = await prisma.income.findMany({
             where: {
                 userId,
@@ -46,16 +46,17 @@ export class PrismaIncomeRepository implements IncomeRepository {
                 },
                 deletedAt: null
             },
-
+            take: 20,
+            skip: (page - 1) * 20,
             orderBy: {
-                receivedAt: "desc"
+                receivedAt: "asc"
             }
         });
 
         return userIncomes;
     }
 
-    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
+    async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date, page: number) {
         const categoryIncomes = await prisma.income.findMany({
             where: {
                 userId,
@@ -63,8 +64,14 @@ export class PrismaIncomeRepository implements IncomeRepository {
                 receivedAt: {
                     gte: startDate,
                     lte: endDate
-                }
+                },
+                deletedAt: null
             },
+            take: 20,
+            skip: (page - 1) * 20,
+            orderBy: {
+                receivedAt: "asc"
+            }
         });
 
         return categoryIncomes;

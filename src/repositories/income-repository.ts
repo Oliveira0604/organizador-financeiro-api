@@ -27,8 +27,8 @@ export type Income = {
 export interface IncomeRepository {
     create(data: CreateIncomeData): Promise<Income>
     findById(id: string): Promise<Income | null>
-    findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date): Promise<Income[]>
-    findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Income[]>
+    findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number): Promise<Income[]>
+    findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date, page: number): Promise<Income[]>
     getTotal(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Decimal>
     getTotalByUserId(userId: string, startDate: Date, endDate: Date): Promise<Decimal>

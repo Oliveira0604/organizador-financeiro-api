@@ -29,26 +29,28 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
         return expense;
     }
 
-    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date) {
+    async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
         const expenses = this.items.
             filter((item) =>
                 item.userId === userId &&
                 item.paidAt >= startDate &&
                 item.paidAt < endDate,
             )
-            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime());
+            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime())
+            .slice((page - 1) * 20, page * 20);
 
         return expenses;
     }
 
-    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date) {
+    async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date, page: number) {
         const exepenses = this.items
             .filter((item) =>
                 item.categoryId === categoryId &&
                 item.paidAt >= startDate &&
                 item.paidAt <= endDate
             )
-            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime());
+            .sort((firstExpense, secondExpense) => firstExpense.paidAt.getTime() - secondExpense.paidAt.getTime())
+            .slice((page - 1) * 20, page * 20);
 
         return exepenses;
     }
