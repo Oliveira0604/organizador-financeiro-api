@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GetPercentageByCategoryUseCase } from "./get-percentage-by-category-use-case";
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { User } from "@/repositories/user-repository";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
@@ -26,7 +25,8 @@ describe("Get Percentage By Category Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         firstCategory = await categoryRepository.create({
@@ -48,7 +48,7 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(100),
+            amount: 100,
             categoryId: firstCategory.id,
             userId: user.id
         });
@@ -57,7 +57,7 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: firstCategory.id,
             userId: user.id
         });
@@ -66,7 +66,7 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "trip",
-            amount: new Decimal(100),
+            amount: 100,
             categoryId: secondCategory.id,
             userId: user.id
         });
@@ -75,7 +75,7 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "electricity bill",
-            amount: new Decimal(100),
+            amount: 100,
             categoryId: thridCategory.id,
             userId: user.id
         });
@@ -84,7 +84,7 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: firstCategory.id,
             userId: user.id
         });
@@ -105,7 +105,7 @@ describe("Get Percentage By Category Use Case", () => {
             endDate: new Date(2026, 7, 25)
         });
 
-        expect(percentage).toEqual(new Decimal(60));
+        expect(percentage).toEqual(60);
     });
 
     it("should get the the percentage by category from the current month if the range of date is not provided", async () => {
@@ -113,14 +113,14 @@ describe("Get Percentage By Category Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(100),
+            amount: 100,
             userId: user.id,
             categoryId: firstCategory.id
         });
 
         await expenseRepository.create({
             title: "shopping mall",
-            amount: new Decimal(300),
+            amount: 300,
             userId: user.id,
             categoryId: secondCategory.id
         });
@@ -132,6 +132,6 @@ describe("Get Percentage By Category Use Case", () => {
 
         console.log(expenseRepository.items);
 
-        expect(currentMonthPercentage).toEqual(new Decimal(25));
+        expect(currentMonthPercentage).toEqual(25);
     });
 });

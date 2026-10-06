@@ -2,7 +2,6 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { UpdateExpenseUseCase } from "./update-expense-use-case";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { Expense } from "@/repositories/expense-repository";
 import type { Category } from "@/repositories/category-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
@@ -29,7 +28,7 @@ describe("Update Expense Use Case", () => {
 
         expense = await expenseRepository.create({
             title: "arroz",
-            amount: new Decimal(15),
+            amount: 15,
             categoryId: category.id,
             userId: "user-01",
         });
@@ -42,21 +41,21 @@ describe("Update Expense Use Case", () => {
             userId: "user-01",
         });
 
-        expect(updatedExpense.expense.title).toEqual("feijao");
-        expect(updatedExpense.expense.amount).toEqual(new Decimal(15));
-        expect(updatedExpense.expense.categoryId).toEqual(category.id);
+        expect(updatedExpense.expense!.title).toEqual("feijao");
+        expect(updatedExpense.expense!.amount).toEqual(15);
+        expect(updatedExpense.expense!.categoryId).toEqual(category.id);
     });
 
     it("should be able to update only the expense amount", async () => {
         const updatedExpense = await updateExpenseUseCase.execute({
             id: expense.id,
-            amount: new Decimal(25),
+            amount: 25,
             userId: "user-01"
         });
 
-        expect(updatedExpense.expense.amount).toEqual(new Decimal(25));
-        expect(updatedExpense.expense.categoryId).toEqual(category.id);
-        expect(updatedExpense.expense.title).toEqual("arroz");
+        expect(updatedExpense.expense!.amount).toEqual(25);
+        expect(updatedExpense.expense!.categoryId).toEqual(category.id);
+        expect(updatedExpense.expense!.title).toEqual("arroz");
     });
 
     it("should be able to update only the expense category", async () => {
@@ -71,9 +70,9 @@ describe("Update Expense Use Case", () => {
             userId: "user-01"
         });
 
-        expect(updatedExpense.expense.categoryId).toEqual(newCategory.id);
-        expect(updatedExpense.expense.title).toEqual("arroz");
-        expect(updatedExpense.expense.amount).toEqual(new Decimal(15));
+        expect(updatedExpense.expense!.categoryId).toEqual(newCategory.id);
+        expect(updatedExpense.expense!.title).toEqual("arroz");
+        expect(updatedExpense.expense!.amount).toEqual(15);
     });
 
     it("should not be able to update any field if the expense doesn't exist", async () => {
@@ -81,7 +80,7 @@ describe("Update Expense Use Case", () => {
             updateExpenseUseCase.execute({
                 id: "expense-id",
                 title: "arroz",
-                amount: new Decimal(100),
+                amount: 100,
                 categoryName: "test",
                 userId: "user-01"
             })
@@ -93,7 +92,7 @@ describe("Update Expense Use Case", () => {
             updateExpenseUseCase.execute({
                 id: expense.id,
                 title: "arroz",
-                amount: new Decimal(25),
+                amount: 25,
                 userId: "user-02"
             })
         ).rejects.toBeInstanceOf(NotAllowedError);
@@ -103,7 +102,7 @@ describe("Update Expense Use Case", () => {
         await expect(
             updateExpenseUseCase.execute({
                 id: expense.id,
-                amount: new Decimal(-10),
+                amount: -10,
                 userId: "user-01"
             })
         ).rejects.toBeInstanceOf(InvalidAmountError);

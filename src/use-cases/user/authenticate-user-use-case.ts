@@ -4,7 +4,7 @@ import type { UserRepository } from "@/repositories/user-repository";
 import type { TokenGenerator } from "@/tokens/token-generator-";
 
 interface AuthenticateUserUseCaseRequest {
-    phoneNumber: string
+    email: string
     password: string
 }
 
@@ -21,11 +21,11 @@ export class AuthenticateUserUseCase {
     ) { }
 
     async execute({
-        phoneNumber,
+        email,
         password
     }: AuthenticateUserUseCaseRequest): Promise<AuthenticateUserUseCaseResponse> {
 
-        const user = await this.userRepository.findByPhoneNumber(phoneNumber);
+        const user = await this.userRepository.findByEmail(email);
 
         if (!user) {
             throw new InvalidCredentialsError();

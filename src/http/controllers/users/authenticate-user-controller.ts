@@ -4,7 +4,7 @@ import z from "zod";
 import type { HttpRequest, HttpResponse } from "../http";
 
 const authenticateUserSchema = z.object({
-    phoneNumber: z.string(),
+    email: z.email(),
     password: z.string()
 });
 
@@ -14,10 +14,10 @@ export class AuthenticateUserController implements Controller {
     ) { }
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
-        const { phoneNumber, password } = authenticateUserSchema.parse(request.body);
+        const { email, password } = authenticateUserSchema.parse(request.body);
 
         const { acessToken, refreshToken } = await this.authenticateUserUseCase.execute({
-            phoneNumber,
+            email,
             password
         });
 

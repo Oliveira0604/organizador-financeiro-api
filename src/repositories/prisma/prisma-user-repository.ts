@@ -20,10 +20,10 @@ export class PrismaUserRepository implements UserRepository {
         return user;
     }
 
-    async findByPhoneNumber(phoneNumber: string) {
+    async findByEmail(email: string) {
         const user = await prisma.user.findUnique({
             where: {
-                phoneNumber,
+                email,
             }
         });
 

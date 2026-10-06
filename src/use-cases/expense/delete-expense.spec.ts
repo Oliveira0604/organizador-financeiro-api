@@ -1,7 +1,6 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DeleteExpenseUseCase } from "./delete-expense-use-case";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { Expense } from "@/repositories/expense-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
@@ -17,7 +16,7 @@ describe("Delete Expense Use Case", () => {
 
         expense = await expenseRepository.create({
             title: "café",
-            amount: new Decimal(45),
+            amount: 45,
             categoryId: "category-01",
             userId: "user-01"
         });

@@ -9,7 +9,7 @@ export class InMemoryUserRepository implements UserRepository {
         const user = {
             id: randomUUID(),
             name: data.name,
-            phoneNumber: data.phoneNumber,
+            email: data.email,
             passwordHash: data.passwordHash ?? null,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -31,8 +31,8 @@ export class InMemoryUserRepository implements UserRepository {
         return user;
     }
 
-    async findByPhoneNumber(phoneNumber: string) {
-        const user = this.items.find((item) => item.phoneNumber === phoneNumber);
+    async findByEmail(email: string) {
+        const user = this.items.find((item) => item.email === email);
 
         if (!user) {
             return null;

@@ -2,7 +2,6 @@ import { InvalidStringError } from "@/errors/invalid-string-error";
 import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
-import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { CategoryRepository } from "@/repositories/category-repository";
 import type { Expense, ExpenseRepository, UpdateExpenseData } from "@/repositories/expense-repository";
 import { isValidAmount } from "@/utils/is-valid-amount";
@@ -12,7 +11,7 @@ interface UpdateExpenseUseCaseRequest {
     userId: string,
     title?: string,
     categoryName?: string
-    amount?: Decimal
+    amount?: number
 }
 
 interface UpdateExpenseUseCaseResponse {

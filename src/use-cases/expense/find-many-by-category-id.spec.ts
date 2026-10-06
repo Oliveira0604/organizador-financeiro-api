@@ -1,7 +1,6 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FindManyByCategoryIdUseCase } from "./find-many-by-category-id-use-case";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import type { Category } from "@/repositories/category-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
@@ -27,7 +26,8 @@ describe("Find Many By Category Id Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         category = await categoryRepository.create({
@@ -40,7 +40,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(100),
+            amount: 100,
             categoryId: category.id,
             userId: user.id,
         });
@@ -49,7 +49,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: category.id,
             userId: user.id,
         });
@@ -70,12 +70,12 @@ describe("Find Many By Category Id Use Case", () => {
 
         expect(expenses).toHaveLength(2);
         expect(expenses[0]!.title).toEqual("supermarket");
-        expect(expenses[0]!.amount).toEqual(new Decimal(100));
+        expect(expenses[0]!.amount).toEqual(100);
         expect(expenses[0]!.categoryId).toEqual(category.id);
         expect(expenses[0]!.userId).toEqual(user.id);
 
         expect(expenses[1]!.title).toEqual("supermarket");
-        expect(expenses[1]!.amount).toEqual(new Decimal(200));
+        expect(expenses[1]!.amount).toEqual(200);
         expect(expenses[1]!.categoryId).toEqual(category.id);
         expect(expenses[1]!.userId).toEqual(user.id);
     });
@@ -89,12 +89,12 @@ describe("Find Many By Category Id Use Case", () => {
 
         expect(expenses).toHaveLength(2);
         expect(expenses[0]!.title).toEqual("supermarket");
-        expect(expenses[0]!.amount).toEqual(new Decimal(100));
+        expect(expenses[0]!.amount).toEqual(100);
         expect(expenses[0]!.categoryId).toEqual(category.id);
         expect(expenses[0]!.userId).toEqual(user.id);
 
         expect(expenses[1]!.title).toEqual("supermarket");
-        expect(expenses[1]!.amount).toEqual(new Decimal(200));
+        expect(expenses[1]!.amount).toEqual(200);
         expect(expenses[1]!.categoryId).toEqual(category.id);
         expect(expenses[1]!.userId).toEqual(user.id);
     });
@@ -124,7 +124,8 @@ describe("Find Many By Category Id Use Case", () => {
     it("should not be able to get the expenses if the userId is different", async () => {
         const secondUser = await userRepository.create({
             name: "May",
-            phoneNumber: "+55 11 8888-8888"
+            email: "may@email.com",
+            passwordHash: "12345678"
         });
 
         await expect(
@@ -144,7 +145,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await expenseRepository.create({
             title: "gym",
-            amount: new Decimal(150),
+            amount: 150,
             categoryId: gymCategory.id,
             userId: user.id
         });

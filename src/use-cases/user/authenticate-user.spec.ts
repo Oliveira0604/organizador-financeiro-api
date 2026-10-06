@@ -21,12 +21,12 @@ describe("Authenticate User Use Case", () => {
     it("should be able to authenticate a user", async () => {
         await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999",
+            email: "nathan@email.com",
             passwordHash: await hash.hash("123456")
         });
 
         const { acessToken, refreshToken } = await authenticateUserUseCase.execute({
-            phoneNumber: "+55 11 9999-9999",
+            email: "nathan@email.com",
             password: "123456"
         });
 
@@ -37,7 +37,7 @@ describe("Authenticate User Use Case", () => {
     it("should not be able to authenticate an user if the user doesn't exist", async () => {
         await expect(
             authenticateUserUseCase.execute({
-                phoneNumber: "+55 11 9999-9999",
+                email: "nathan@email.com",
                 password: "123456"
             })
         ).rejects.toBeInstanceOf(InvalidCredentialsError);
@@ -46,13 +46,13 @@ describe("Authenticate User Use Case", () => {
     it("should not be able to authenticate an user if the password is wrong", async () => {
         await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999",
+            email: "nathan@email.com",
             passwordHash: await hash.hash("654321")
         });
 
         await expect(
             authenticateUserUseCase.execute({
-                phoneNumber: "+55 11 9999-9999",
+                email: "nathan@email.com",
                 password: "123456"
             })
         ).rejects.toBeInstanceOf(InvalidCredentialsError);

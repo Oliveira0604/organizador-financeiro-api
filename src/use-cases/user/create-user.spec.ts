@@ -18,7 +18,7 @@ describe("Create User use case", () => {
     it("should hash a password before saving it", async () => {
         const user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999",
+            email: "nathan@email.com",
             passwordHash: await hash.hash("123456")
         });
 
@@ -28,25 +28,25 @@ describe("Create User use case", () => {
     it("should be able create a user", async () => {
         const { user } = await createUserUseCase.execute({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999",
+            email: "nathan@email.com",
             password: "123456"
         });
 
         expect(user.id).toEqual(expect.any(String));
     });
 
-    it("should not be able to create a user if the phone number already exists", async () => {
-        const phoneNumber = "+55 11 9999-9999";
+    it("should not be able to create a user if the email already exists", async () => {
+        const email = "nathan@email.com";
 
         await userRepository.create({
             name: "Nathan",
-            phoneNumber,
+            email,
             passwordHash: "123456"
         });
 
         await expect(() => createUserUseCase.execute({
             name: "Nathan",
-            phoneNumber,
+            email,
             password: "123456"
         })).rejects.toBeInstanceOf(UserAlreadyExistsError);
     });

@@ -1,7 +1,6 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-by-user-id-between-dates-use-case";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import type { User } from "@/repositories/user-repository";
 import { InvalidDateError } from "@/errors/invalid-date-error";
@@ -23,17 +22,19 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         secondUser = await userRepository.create({
             name: "John",
-            phoneNumber: "+55 11 9999-9999"
+            email: "john@email.com",
+            passwordHash: "12345678"
         });
 
 
         await expenseRepository.create({
-            amount: new Decimal(100),
+            amount: 100,
             categoryId: "category-01",
             title: "Supermarket",
             userId: user.id
@@ -42,7 +43,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         vi.setSystemTime(new Date(2026, 7, 10));
 
         await expenseRepository.create({
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: "category-01",
             title: "Supermarket",
             userId: user.id
@@ -51,14 +52,14 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         vi.setSystemTime(new Date(2026, 7, 10));
 
         await expenseRepository.create({
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: "category-01",
             title: "Supermarket",
             userId: secondUser.id
         });
 
         await expenseRepository.create({
-            amount: new Decimal(200),
+            amount: 200,
             categoryId: "category-01",
             title: "Supermarket",
             userId: secondUser.id
@@ -125,7 +126,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         const testExpense = await expenseRepository.create({
             title: "supermarket",
-            amount: new Decimal(700),
+            amount: 700,
             categoryId: "category-01",
             userId: user.id
         });

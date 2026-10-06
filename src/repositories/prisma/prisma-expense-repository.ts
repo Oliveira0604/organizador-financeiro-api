@@ -1,6 +1,5 @@
 import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { prisma } from "@/lib/prisma";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class PrismaExpenseRepository implements ExpenseRepository {
     async create(data: CreateExpenseData) {
@@ -13,7 +12,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return expense;
+        return {
+            ...expense,
+            amount: expense.amount.toNumber()
+        };
     }
 
     async findById(id: string) {
@@ -24,7 +26,14 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return expense;
+        if (!expense) {
+            return null;
+        }
+
+        return {
+            ...expense,
+            amount: expense?.amount.toNumber()
+        };
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
@@ -44,7 +53,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return dateExpenses;
+        return dateExpenses.map((expense) => ({
+            ...expense,
+            amount: expense.amount.toNumber()
+        }));
     }
 
     async findManyByCategoryId(categoryId: string, startDate: Date, endDate: Date, page: number) {
@@ -64,7 +76,10 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return expenses;
+        return expenses.map((expense) => ({
+            ...expense,
+            amount: expense.amount.toNumber()
+        }));
     }
 
     async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
@@ -83,7 +98,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return totalByCategory._sum.amount ?? new Decimal(0);
+        return totalByCategory._sum.amount?.toNumber() ?? 0;
     }
 
     async getTotalByUserId(userId: string, startDate: Date, endDate: Date) {
@@ -101,7 +116,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             }
         });
 
-        return total._sum.amount ?? new Decimal(0);
+        return total._sum.amount?.toNumber() ?? 0;
     }
 
     async getTotal(userId: string, startDate: Date, endDate: Date) {
@@ -120,7 +135,7 @@ export class PrismaExpenseRepository implements ExpenseRepository {
 
         });
 
-        return totalExpense._sum.amount ?? new Decimal(0);
+        return totalExpense._sum.amount?.toNumber() ?? 0;
     }
 
     async update(id: string, data: UpdateExpenseData) {
@@ -131,7 +146,11 @@ export class PrismaExpenseRepository implements ExpenseRepository {
             data,
         });
 
-        return updatedExpense;
+        return {
+            ...updatedExpense,
+            amount: updatedExpense.amount.toNumber()
+
+        };
 
     }
 

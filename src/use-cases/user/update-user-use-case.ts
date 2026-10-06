@@ -1,10 +1,12 @@
+import type { BcryptHasher } from "@/cryptography/bcrypt-hasher";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { User, UpdateUserData, UserRepository } from "@/repositories/user-repository";
 
 interface UpdateUserUseCaseRequest {
     userId: string,
     name?: string,
-    phoneNumber?: string
+    email?: string
+    password?: string
 }
 
 interface UpdateUserUseCaseResponse {
@@ -13,12 +15,16 @@ interface UpdateUserUseCaseResponse {
 
 
 export class UpdateUserUseCase {
-    constructor(private userRepository: UserRepository) { }
+    constructor(
+        private userRepository: UserRepository,
+        private bcryptHasher: BcryptHasher
+    ) { }
 
     async execute({
         userId,
         name,
-        phoneNumber,
+        email,
+        password
     }: UpdateUserUseCaseRequest): Promise<UpdateUserUseCaseResponse> {
         const user = await this.userRepository.findById(userId);
 
@@ -32,8 +38,13 @@ export class UpdateUserUseCase {
             data.name = name;
         };
 
-        if (phoneNumber) {
-            data.phoneNumber = phoneNumber;
+        if (email) {
+            data.email = email;
+        }
+
+        if (password) {
+            const passwordHash = await this.bcryptHasher.hash(password);
+            data.passwordHash = passwordHash;
         }
 
         const updatedUser = await this.userRepository.update(

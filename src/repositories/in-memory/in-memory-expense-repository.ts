@@ -1,7 +1,6 @@
 import type { Expense } from "../expense-repository";
 import type { CreateExpenseData, ExpenseRepository, UpdateExpenseData } from "../expense-repository";
 import { randomUUID } from "node:crypto";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class InMemoryExpenseRepository implements ExpenseRepository {
     public items: Expense[] = [];
@@ -62,9 +61,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             item.paidAt >= startDate &&
             item.paidAt <= endDate
         ).reduce(
-            (accumulator, expense) => accumulator.plus(expense.amount),
-            new Decimal(0)
-        );
+            (accumulator, expense) => accumulator + expense.amount, 0);
 
         return categoryTotal;
     }
@@ -75,8 +72,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             item.paidAt >= startDate &&
             item.paidAt <= endDate
         ).reduce(
-            (accumulator, expense) => accumulator.plus(expense.amount), new Decimal(0)
-        );
+            (accumulator, expense) => accumulator + expense.amount, 0);
 
         return userTotal;
     }
@@ -86,7 +82,7 @@ export class InMemoryExpenseRepository implements ExpenseRepository {
             item.userId === userId &&
             item.paidAt >= startDate &&
             item.paidAt <= endDate
-        ).reduce((accumulator, expense) => accumulator.plus(expense.amount), new Decimal(0));
+        ).reduce((accumulator, expense) => accumulator + expense.amount, 0);
 
 
         return total;
