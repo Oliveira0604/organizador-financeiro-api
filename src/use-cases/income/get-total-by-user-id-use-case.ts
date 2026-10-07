@@ -1,6 +1,5 @@
 import { InvalidDateError } from "@/errors/invalid-date-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { IncomeRepository } from "@/repositories/income-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 
@@ -11,7 +10,7 @@ interface GetTotalByUserIdUseCaseRequest {
 }
 
 interface GetTotalByUserIdUseCaseResponse {
-    total: Decimal
+    total: number
 }
 
 export class GetTotalByUserIdUseCase {

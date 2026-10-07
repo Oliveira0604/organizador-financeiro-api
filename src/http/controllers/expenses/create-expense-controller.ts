@@ -39,6 +39,3 @@ export class CreateExpenseController implements Controller {
         };
     }
 }
-
-//TODO: Finish this controller. 
-// Create the factory for it.

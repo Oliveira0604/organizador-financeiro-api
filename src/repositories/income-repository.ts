@@ -1,22 +1,20 @@
-import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
-
 export type CreateIncomeData = {
     title: string,
-    amount: Decimal,
+    amount: number,
     categoryId: string,
     userId: string,
 }
 
 export type UpdateIncomeData = {
     title?: string,
-    amount?: Decimal,
+    amount?: number,
     receivedAt?: Date
 }
 
 export type Income = {
     id: string,
     title: string,
-    amount: Decimal,
+    amount: number,
     receivedAt: Date,
     categoryId: string,
     userId: string,
@@ -29,9 +27,9 @@ export interface IncomeRepository {
     findById(id: string): Promise<Income | null>
     findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number): Promise<Income[]>
     findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date, page: number): Promise<Income[]>
-    getTotal(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
-    getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<Decimal>
-    getTotalByUserId(userId: string, startDate: Date, endDate: Date): Promise<Decimal>
+    getTotal(userId: string, startDate: Date, endDate: Date): Promise<number>
+    getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date): Promise<number>
+    getTotalByUserId(userId: string, startDate: Date, endDate: Date): Promise<number>
     update(id: string, data: UpdateIncomeData): Promise<Income | null>
     delete(id: string): Promise<void>
 }

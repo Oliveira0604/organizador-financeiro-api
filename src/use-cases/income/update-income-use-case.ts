@@ -3,7 +3,6 @@ import { InvalidStringError } from "@/errors/invalid-string-error";
 import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
-import type { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import type { Income, IncomeRepository, UpdateIncomeData } from "@/repositories/income-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 import { isValidAmount } from "@/utils/is-valid-amount";
@@ -12,7 +11,7 @@ interface UpdateIncomeUseCaseRequest {
     incomeId: string,
     userId: string,
     title?: string,
-    amount?: Decimal,
+    amount?: number,
     receivedAt?: Date
 
 }

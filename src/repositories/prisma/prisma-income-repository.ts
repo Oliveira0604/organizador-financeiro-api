@@ -1,6 +1,5 @@
 import type { CreateIncomeData, IncomeRepository, UpdateIncomeData } from "../income-repository";
 import { prisma } from "@/lib/prisma";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class PrismaIncomeRepository implements IncomeRepository {
     async create(data: CreateIncomeData) {
@@ -23,7 +22,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
             },
         });
 
-        return income;
+        return {
+            ...income,
+            amount: income.amount.toNumber()
+        };
     }
 
     async findById(id: string) {
@@ -33,7 +35,14 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return income;
+        if (!income) {
+            return null;
+        }
+
+        return {
+            ...income,
+            amount: income?.amount.toNumber()
+        };
     }
 
     async findManyByUserIdBetweenDates(userId: string, startDate: Date, endDate: Date, page: number) {
@@ -53,7 +62,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return userIncomes;
+        return userIncomes.map((income) => ({
+            ...income,
+            amount: income.amount.toNumber()
+        }));
     }
 
     async findManyByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date, page: number) {
@@ -74,7 +86,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return categoryIncomes;
+        return categoryIncomes.map((income) => ({
+            ...income,
+            amount: income.amount.toNumber()
+        }));
     }
 
     async getTotal(userId: string, startDate: Date, endDate: Date) {
@@ -91,7 +106,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return totalIncome._sum.amount ?? new Decimal(0);
+        return totalIncome._sum.amount?.toNumber() ?? 0;
     }
 
     async getTotalByCategoryId(userId: string, categoryId: string, startDate: Date, endDate: Date) {
@@ -109,7 +124,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return totalIncome._sum.amount ?? new Decimal(0);
+        return totalIncome._sum.amount?.toNumber() ?? 0;
     }
 
     async getTotalByUserId(id: string, startDate: Date, endDate: Date) {
@@ -126,7 +141,7 @@ export class PrismaIncomeRepository implements IncomeRepository {
             }
         });
 
-        return total._sum.amount ?? new Decimal(0);
+        return total._sum.amount?.toNumber() ?? 0;
     }
 
     async update(id: string, data: UpdateIncomeData) {
@@ -137,7 +152,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
             data
         });
 
-        return income;
+        return {
+            ...income,
+            amount: income.amount.toNumber()
+        };
     }
 
     async delete(id: string) {

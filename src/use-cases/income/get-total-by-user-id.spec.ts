@@ -5,7 +5,6 @@ import { GetTotalByUserIdUseCase } from "./get-total-by-user-id-use-case";
 import type { Category } from "@/repositories/category-repository";
 import type { User } from "@/repositories/user-repository";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { InvalidDateError } from "@/errors/invalid-date-error";
 
@@ -27,7 +26,8 @@ describe("Get Total By User Id Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         firstCategory = await categoryRepository.create({
@@ -44,7 +44,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Salary",
-            amount: new Decimal(40000),
+            amount: 40000,
             categoryId: firstCategory.id,
             userId: user.id
         });
@@ -53,7 +53,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Google project",
-            amount: new Decimal(25000),
+            amount: 25000,
             categoryId: secondCategory.id,
             userId: user.id
         });
@@ -62,7 +62,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Amazon project",
-            amount: new Decimal(15000),
+            amount: 15000,
             categoryId: secondCategory.id,
             userId: user.id
         });
@@ -79,7 +79,7 @@ describe("Get Total By User Id Use Case", () => {
             endDate: new Date(2026, 7, 31)
         });
 
-        expect(total).toEqual(new Decimal(80000));
+        expect(total).toEqual(80000);
     });
 
     it("should get the user total of the current month if the range of time is not ptovided", async () => {
@@ -87,7 +87,7 @@ describe("Get Total By User Id Use Case", () => {
             userId: user.id,
         });
 
-        expect(total).toEqual(new Decimal(80000));
+        expect(total).toEqual(80000);
     });
 
     it("should not get the user total if start date is greater than end date", async () => {
@@ -113,14 +113,15 @@ describe("Get Total By User Id Use Case", () => {
     it("should calculate totals independently for different users", async () => {
         const secondUser = await userRepository.create({
             name: "May",
-            phoneNumber: "+55 11 8888-8888",
+            email: "may@email.com",
+            passwordHash: "12345678"
         });
 
         vi.setSystemTime(new Date(2026, 7, 5));
 
         await incomeRepository.create({
             title: "salary",
-            amount: new Decimal(40000),
+            amount: 40000,
             userId: secondUser.id,
             categoryId: firstCategory.id
         });
@@ -129,7 +130,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Makan project",
-            amount: new Decimal(15000),
+            amount: 15000,
             userId: secondUser.id,
             categoryId: secondCategory.id
         });
@@ -138,7 +139,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Big agency project",
-            amount: new Decimal(20000),
+            amount: 20000,
             userId: secondUser.id,
             categoryId: secondCategory.id
         });
@@ -155,8 +156,8 @@ describe("Get Total By User Id Use Case", () => {
             endDate: new Date(2026, 7, 31)
         });
 
-        expect(total).toEqual(new Decimal(75000));
-        expect(firstUserTotal).toEqual(new Decimal(80000));
+        expect(total).toEqual(75000);
+        expect(firstUserTotal).toEqual(80000);
     });
 
     it("should return 0 if there is no income in the provided range of time", async () => {
@@ -166,7 +167,7 @@ describe("Get Total By User Id Use Case", () => {
             endDate: new Date(2026, 8, 31)
         });
 
-        expect(total).toEqual(new Decimal(0));
+        expect(total).toEqual(0);
     });
 
     it("should not include incomes thay is not in the provided range of time", async () => {
@@ -174,7 +175,7 @@ describe("Get Total By User Id Use Case", () => {
 
         await incomeRepository.create({
             title: "Month salary",
-            amount: new Decimal(50000),
+            amount: 50000,
             userId: user.id,
             categoryId: firstCategory.id
         });
@@ -185,6 +186,6 @@ describe("Get Total By User Id Use Case", () => {
             endDate: new Date(2026, 7, 31)
         });
 
-        expect(total).toEqual(new Decimal(80000));
+        expect(total).toEqual(80000);
     });
 });

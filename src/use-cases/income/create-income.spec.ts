@@ -2,7 +2,6 @@ import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-c
 import { InMemoryIncomeRepository } from "@/repositories/in-memory/in-memory-income-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CreateIncomeUseCase } from "./create-income-use-case";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { InvalidAmountError } from "@/errors/is-amount-valid-error";
@@ -37,14 +36,14 @@ describe("Create Income Use Case", () => {
 
         const { income } = await createIncomeUseCase.execute({
             title: "month salary",
-            amount: new Decimal(20000),
+            amount: 20000,
             categoryId: category.id,
             userId: "user-01"
         });
 
         expect(income.id).toEqual(expect.any(String));
         expect(income.title).toEqual("month salary");
-        expect(income.amount).toEqual(new Decimal(20000));
+        expect(income.amount).toEqual(20000);
         expect(income.receivedAt).toEqual(new Date(2026, 7, 14));
         expect(income.categoryId).toEqual(category.id);
         expect(income.userId).toEqual("user-01");
@@ -54,7 +53,7 @@ describe("Create Income Use Case", () => {
         await expect(
             createIncomeUseCase.execute({
                 title: "month salary",
-                amount: new Decimal(20000),
+                amount: 20000,
                 categoryId: "non-existent",
                 userId: "user-01"
             })
@@ -67,7 +66,7 @@ describe("Create Income Use Case", () => {
         await expect(
             createIncomeUseCase.execute({
                 title: "month salary",
-                amount: new Decimal(20000),
+                amount: 20000,
                 categoryId: category.id,
                 userId: "user-02"
             })
@@ -80,7 +79,7 @@ describe("Create Income Use Case", () => {
         await expect(
             createIncomeUseCase.execute({
                 title: "month salary",
-                amount: new Decimal(0),
+                amount: -1,
                 categoryId: category.id,
                 userId: "user-01"
             })
@@ -93,7 +92,7 @@ describe("Create Income Use Case", () => {
         await expect(
             createIncomeUseCase.execute({
                 title: "",
-                amount: new Decimal(20000),
+                amount: 20000,
                 categoryId: category.id,
                 userId: "user-01"
             })
@@ -106,7 +105,7 @@ describe("Create Income Use Case", () => {
         await expect(
             createIncomeUseCase.execute({
                 title: " ",
-                amount: new Decimal(20000),
+                amount: 2000,
                 categoryId: category.id,
                 userId: "user-01"
             })

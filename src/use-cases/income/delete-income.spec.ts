@@ -2,7 +2,6 @@ import { InMemoryIncomeRepository } from "@/repositories/in-memory/in-memory-inc
 import type { Income } from "@/repositories/income-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DeleteIncomeUseCase } from "./delete-income-use-case";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 
@@ -18,7 +17,7 @@ describe("Delete Income Use Case", () => {
 
         income = await incomeRepository.create({
             title: "salary",
-            amount: new Decimal(110000),
+            amount: 110000,
             userId: "user-01",
             categoryId: "category-01"
         });

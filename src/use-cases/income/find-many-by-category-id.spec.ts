@@ -5,7 +5,6 @@ import { FindManyByCategoryIdUseCase } from "./find-many-by-category-id-use-case
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import type { Category } from "@/repositories/category-repository";
 import type { User } from "@/repositories/user-repository";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { InvalidDateError } from "@/errors/invalid-date-error";
@@ -28,7 +27,8 @@ describe("Find Many By Category Id Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         firstCategory = await categoryRepository.create({
@@ -45,7 +45,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await incomeRepository.create({
             title: "salary",
-            amount: new Decimal(30000),
+            amount: 30000,
             categoryId: firstCategory.id,
             userId: user.id
         });
@@ -54,7 +54,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await incomeRepository.create({
             title: "google project",
-            amount: new Decimal(15000),
+            amount: 15000,
             categoryId: secondCategory.id,
             userId: user.id
         });
@@ -63,7 +63,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         await incomeRepository.create({
             title: "amazon project",
-            amount: new Decimal(10000),
+            amount: 10000,
             categoryId: secondCategory.id,
             userId: user.id
         });
@@ -93,15 +93,15 @@ describe("Find Many By Category Id Use Case", () => {
 
         expect(incomes).toHaveLength(1);
         expect(incomes[0]?.title).toEqual("salary");
-        expect(incomes[0]?.amount).toEqual(new Decimal(30000));
+        expect(incomes[0]?.amount).toEqual(30000);
         expect(incomes[0]?.receivedAt).toEqual(new Date(2026, 7, 5));
 
         expect(secondIncomes).toHaveLength(2);
         expect(secondIncomes[0]?.title).toEqual("google project");
-        expect(secondIncomes[0]?.amount).toEqual(new Decimal(15000));
+        expect(secondIncomes[0]?.amount).toEqual(15000);
         expect(secondIncomes[0]?.receivedAt).toEqual(new Date(2026, 7, 10));
         expect(secondIncomes[1]?.title).toEqual("amazon project");
-        expect(secondIncomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(secondIncomes[1]?.amount).toEqual(10000);
         expect(secondIncomes[1]?.receivedAt).toEqual(new Date(2026, 7, 20));
 
     });
@@ -121,15 +121,15 @@ describe("Find Many By Category Id Use Case", () => {
 
         expect(incomes).toHaveLength(1);
         expect(incomes[0]?.title).toEqual("salary");
-        expect(incomes[0]?.amount).toEqual(new Decimal(30000));
+        expect(incomes[0]?.amount).toEqual(30000);
         expect(incomes[0]?.receivedAt).toEqual(new Date(2026, 7, 5));
 
         expect(secondIncomes).toHaveLength(2);
         expect(secondIncomes[0]?.title).toEqual("google project");
-        expect(secondIncomes[0]?.amount).toEqual(new Decimal(15000));
+        expect(secondIncomes[0]?.amount).toEqual(15000);
         expect(secondIncomes[0]?.receivedAt).toEqual(new Date(2026, 7, 10));
         expect(secondIncomes[1]?.title).toEqual("amazon project");
-        expect(secondIncomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(secondIncomes[1]?.amount).toEqual(10000);
         expect(secondIncomes[1]?.receivedAt).toEqual(new Date(2026, 7, 20));
     });
 
@@ -172,7 +172,8 @@ describe("Find Many By Category Id Use Case", () => {
     it("should not get the category incomes if the user id is different", async () => {
         const secondUser = await userRepository.create({
             name: "test",
-            phoneNumber: "+55 11 8888-8888"
+            email: "test@email.com",
+            passwordHash: "12345678"
         });
 
         await expect(
@@ -191,7 +192,7 @@ describe("Find Many By Category Id Use Case", () => {
 
         const outOfRangeIncome = await incomeRepository.create({
             title: "freelance",
-            amount: new Decimal(20000),
+            amount: 20000,
             userId: user.id,
             categoryId: secondCategory.id
         });
@@ -211,14 +212,15 @@ describe("Find Many By Category Id Use Case", () => {
     it("should not get the incomes from another user", async () => {
         const secondUser = await userRepository.create({
             name: "May",
-            phoneNumber: "+55 11 8888-8888"
+            email: "may@email.com",
+            passwordHash: "12345678"
         });
 
         vi.setSystemTime(new Date(2026, 7, 5));
 
         await incomeRepository.create({
             title: "freelance",
-            amount: new Decimal(10000),
+            amount: 10000,
             userId: secondUser.id,
             categoryId: secondCategory.id
         });

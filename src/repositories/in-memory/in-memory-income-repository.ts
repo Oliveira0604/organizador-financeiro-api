@@ -1,6 +1,5 @@
 import type { CreateIncomeData, IncomeRepository, UpdateIncomeData, Income } from "@/repositories/income-repository";
 import { randomUUID } from "node:crypto";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 
 export class InMemoryIncomeRepository implements IncomeRepository {
     public items: Income[] = [];
@@ -65,7 +64,7 @@ export class InMemoryIncomeRepository implements IncomeRepository {
             item.categoryId === categoryId &&
             item.receivedAt >= startDate &&
             item.receivedAt <= endDate
-        ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
+        ).reduce((accumulator, income) => accumulator + income.amount, 0);
 
         return total;
     }
@@ -75,7 +74,7 @@ export class InMemoryIncomeRepository implements IncomeRepository {
             item.userId === userId &&
             item.receivedAt >= startDate &&
             item.receivedAt <= endDate
-        ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
+        ).reduce((accumulator, income) => accumulator + income.amount, 0);
 
         return total;
     }
@@ -85,7 +84,7 @@ export class InMemoryIncomeRepository implements IncomeRepository {
             item.userId === userId &&
             item.receivedAt >= startDate &&
             item.receivedAt <= endDate
-        ).reduce((accumulator, income) => accumulator.plus(income.amount), new Decimal(0));
+        ).reduce((accumulator, income) => accumulator + income.amount, 0);
 
         return total;
     }

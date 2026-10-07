@@ -3,7 +3,6 @@ import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-by-user-id-between-dates-use-case";
 import type { User } from "@/repositories/user-repository";
-import { Decimal } from "@/generated/prisma/internal/prismaNamespace";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { InvalidDateError } from "@/errors/invalid-date-error";
 
@@ -25,14 +24,15 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         user = await userRepository.create({
             name: "Nathan",
-            phoneNumber: "+55 11 9999-9999"
+            email: "nathan@email.com",
+            passwordHash: "12345678"
         });
 
         vi.setSystemTime(new Date(2026, 7, 5));
 
         await incomeRepository.create({
             title: "Month salary",
-            amount: new Decimal(20000),
+            amount: 20000,
             categoryId: "category-01",
             userId: user.id
         });
@@ -41,7 +41,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         await incomeRepository.create({
             title: "Freelance",
-            amount: new Decimal(10000),
+            amount: 10000,
             categoryId: "category-02",
             userId: user.id
         });
@@ -50,7 +50,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         await incomeRepository.create({
             title: "Investiments",
-            amount: new Decimal(25000),
+            amount: 25000,
             categoryId: "category-03",
             userId: user.id
         });
@@ -71,17 +71,17 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(incomes).toHaveLength(3);
         expect(incomes[0]?.id).toEqual(expect.any(String));
         expect(incomes[0]?.title).toEqual("Month salary");
-        expect(incomes[0]?.amount).toEqual(new Decimal(20000));
+        expect(incomes[0]?.amount).toEqual(20000);
         expect(incomes[0]?.categoryId).toEqual("category-01");
         expect(incomes[0]?.userId).toEqual(user.id);
 
         expect(incomes[1]?.title).toEqual("Freelance");
-        expect(incomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(incomes[1]?.amount).toEqual(10000);
         expect(incomes[1]?.categoryId).toEqual("category-02");
         expect(incomes[1]?.userId).toEqual(user.id);
 
         expect(incomes[2]?.title).toEqual("Investiments");
-        expect(incomes[2]?.amount).toEqual(new Decimal(25000));
+        expect(incomes[2]?.amount).toEqual(25000);
         expect(incomes[2]?.categoryId).toEqual("category-03");
         expect(incomes[2]?.userId).toEqual(user.id);
     });
@@ -95,17 +95,17 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(incomes).toHaveLength(3);
         expect(incomes[0]?.id).toEqual(expect.any(String));
         expect(incomes[0]?.title).toEqual("Month salary");
-        expect(incomes[0]?.amount).toEqual(new Decimal(20000));
+        expect(incomes[0]?.amount).toEqual(20000);
         expect(incomes[0]?.categoryId).toEqual("category-01");
         expect(incomes[0]?.userId).toEqual(user.id);
 
         expect(incomes[1]?.title).toEqual("Freelance");
-        expect(incomes[1]?.amount).toEqual(new Decimal(10000));
+        expect(incomes[1]?.amount).toEqual(10000);
         expect(incomes[1]?.categoryId).toEqual("category-02");
         expect(incomes[1]?.userId).toEqual(user.id);
 
         expect(incomes[2]?.title).toEqual("Investiments");
-        expect(incomes[2]?.amount).toEqual(new Decimal(25000));
+        expect(incomes[2]?.amount).toEqual(25000);
         expect(incomes[2]?.categoryId).toEqual("category-03");
         expect(incomes[2]?.userId).toEqual(user.id);
     });
@@ -137,12 +137,13 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         const secondUser = await userRepository.create({
             name: "John",
-            phoneNumber: "+55 11 8888-8888"
+            email: "john@email.com",
+            passwordHash: "12345678"
         });
 
         await incomeRepository.create({
             title: "Month salary",
-            amount: new Decimal(10000),
+            amount: 10000,
             categoryId: "category-01",
             userId: secondUser.id
         });
@@ -157,7 +158,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
         expect(incomes).toHaveLength(1);
         expect(incomes[0]?.id).toEqual(expect.any(String));
         expect(incomes[0]?.title).toEqual("Month salary");
-        expect(incomes[0]?.amount).toEqual(new Decimal(10000));
+        expect(incomes[0]?.amount).toEqual(10000);
         expect(incomes[0]?.categoryId).toEqual("category-01");
         expect(incomes[0]?.userId).toEqual(secondUser.id);
     });
@@ -178,7 +179,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
 
         const testIncome = await incomeRepository.create({
             title: "test",
-            amount: new Decimal(30000),
+            amount: 30000,
             categoryId: "category-01",
             userId: user.id
         });
