@@ -1,6 +1,6 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FindManyByCategoryIdUseCase } from "./find-many-by-category-id-use-case";
+import { FindManyExpensesByCategoryIdUseCase } from "./find-many-expenses-by-category-id-use-case";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import type { Category } from "@/repositories/category-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
@@ -12,7 +12,7 @@ import { InvalidDateError } from "@/errors/invalid-date-error";
 let expenseRepository: InMemoryExpenseRepository;
 let categoryRepository: InMemoryCategoryRepository;
 let userRepository: InMemoryUserRepository;
-let findManyByCategoryId: FindManyByCategoryIdUseCase;
+let findManyExpensesByCategoryId: FindManyExpensesByCategoryIdUseCase;
 let category: Category;
 let user: User;
 
@@ -21,7 +21,7 @@ describe("Find Many By Category Id Use Case", () => {
         expenseRepository = new InMemoryExpenseRepository();
         categoryRepository = new InMemoryCategoryRepository();
         userRepository = new InMemoryUserRepository();
-        findManyByCategoryId = new FindManyByCategoryIdUseCase(expenseRepository, categoryRepository, userRepository);
+        findManyExpensesByCategoryId = new FindManyExpensesByCategoryIdUseCase(expenseRepository, categoryRepository, userRepository);
         vi.useFakeTimers();
 
         user = await userRepository.create({
@@ -60,7 +60,7 @@ describe("Find Many By Category Id Use Case", () => {
     });
 
     it("should be able to get the category expenses", async () => {
-        const { expenses } = await findManyByCategoryId.execute({
+        const { expenses } = await findManyExpensesByCategoryId.execute({
             userId: user.id,
             categoryId: category.id,
             startDate: new Date(2026, 7, 1),
@@ -81,7 +81,7 @@ describe("Find Many By Category Id Use Case", () => {
     });
 
     it("should get the expenses from current month if the range of date is not provided", async () => {
-        const { expenses } = await findManyByCategoryId.execute({
+        const { expenses } = await findManyExpensesByCategoryId.execute({
             userId: user.id,
             categoryId: category.id,
             page: 1
@@ -101,7 +101,7 @@ describe("Find Many By Category Id Use Case", () => {
 
     it("should not get the expenses if start date is greater than end date", async () => {
         await expect(
-            findManyByCategoryId.execute({
+            findManyExpensesByCategoryId.execute({
                 userId: user.id,
                 categoryId: category.id,
                 startDate: new Date(2026, 7, 31),
@@ -113,7 +113,7 @@ describe("Find Many By Category Id Use Case", () => {
 
     it("should not be able to get the expenses if the category doesn't exist", async () => {
         await expect(
-            findManyByCategoryId.execute({
+            findManyExpensesByCategoryId.execute({
                 categoryId: "non-existent",
                 userId: user.id,
                 page: 1
@@ -129,7 +129,7 @@ describe("Find Many By Category Id Use Case", () => {
         });
 
         await expect(
-            findManyByCategoryId.execute({
+            findManyExpensesByCategoryId.execute({
                 categoryId: category.id,
                 userId: secondUser.id,
                 page: 1
@@ -150,7 +150,7 @@ describe("Find Many By Category Id Use Case", () => {
             userId: user.id
         });
 
-        const { expenses } = await findManyByCategoryId.execute({
+        const { expenses } = await findManyExpensesByCategoryId.execute({
             categoryId: category.id,
             userId: user.id,
             page: 1

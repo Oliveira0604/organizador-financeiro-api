@@ -1,7 +1,7 @@
 import { InMemoryIncomeRepository } from "@/repositories/in-memory/in-memory-income-repository";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FindManyByCategoryIdUseCase } from "./find-many-by-category-id-use-case";
+import { FindManyIncomesByCategoryIdUseCase } from "./find-many-incomes-by-category-id-use-case";
 import { InMemoryCategoryRepository } from "@/repositories/in-memory/in-memory-category-repository";
 import type { Category } from "@/repositories/category-repository";
 import type { User } from "@/repositories/user-repository";
@@ -12,7 +12,7 @@ import { InvalidDateError } from "@/errors/invalid-date-error";
 let incomeRepository: InMemoryIncomeRepository;
 let userRepository: InMemoryUserRepository;
 let categoryRepository: InMemoryCategoryRepository;
-let findManyByCategoryIdUseCase: FindManyByCategoryIdUseCase;
+let findManyIncomesByCategoryIdUseCase: FindManyIncomesByCategoryIdUseCase;
 let firstCategory: Category;
 let secondCategory: Category;
 let user: User;
@@ -22,7 +22,7 @@ describe("Find Many By Category Id Use Case", () => {
         incomeRepository = new InMemoryIncomeRepository();
         userRepository = new InMemoryUserRepository();
         categoryRepository = new InMemoryCategoryRepository();
-        findManyByCategoryIdUseCase = new FindManyByCategoryIdUseCase(incomeRepository, userRepository, categoryRepository);
+        findManyIncomesByCategoryIdUseCase = new FindManyIncomesByCategoryIdUseCase(incomeRepository, userRepository, categoryRepository);
         vi.useFakeTimers();
 
         user = await userRepository.create({
@@ -75,7 +75,7 @@ describe("Find Many By Category Id Use Case", () => {
     });
 
     it("should get the category incomes", async () => {
-        const { incomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: firstCategory.id,
             startDate: new Date(2026, 7, 1),
@@ -83,7 +83,7 @@ describe("Find Many By Category Id Use Case", () => {
             page: 1
         });
 
-        const { incomes: secondIncomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes: secondIncomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),
@@ -107,13 +107,13 @@ describe("Find Many By Category Id Use Case", () => {
     });
 
     it("should return the incomes from current month if the range of date is not provided", async () => {
-        const { incomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: firstCategory.id,
             page: 1
         });
 
-        const { incomes: secondIncomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes: secondIncomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
             page: 1
@@ -135,7 +135,7 @@ describe("Find Many By Category Id Use Case", () => {
 
     it("should not get the category incomes if start date is greater than end date", async () => {
         await expect(
-            findManyByCategoryIdUseCase.execute({
+            findManyIncomesByCategoryIdUseCase.execute({
                 userId: user.id,
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 31),
@@ -147,7 +147,7 @@ describe("Find Many By Category Id Use Case", () => {
 
     it("should not get the category incomes if the user doesn't exist", async () => {
         await expect(
-            findManyByCategoryIdUseCase.execute({
+            findManyIncomesByCategoryIdUseCase.execute({
                 userId: "non-existent",
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 1),
@@ -159,7 +159,7 @@ describe("Find Many By Category Id Use Case", () => {
 
     it("should not get the category incomes if the category doesn't exist", async () => {
         await expect(
-            findManyByCategoryIdUseCase.execute({
+            findManyIncomesByCategoryIdUseCase.execute({
                 userId: user.id,
                 categoryId: "non-existent",
                 startDate: new Date(2026, 7, 1),
@@ -177,7 +177,7 @@ describe("Find Many By Category Id Use Case", () => {
         });
 
         await expect(
-            findManyByCategoryIdUseCase.execute({
+            findManyIncomesByCategoryIdUseCase.execute({
                 userId: secondUser.id,
                 categoryId: firstCategory.id,
                 startDate: new Date(2026, 7, 1),
@@ -197,7 +197,7 @@ describe("Find Many By Category Id Use Case", () => {
             categoryId: secondCategory.id
         });
 
-        const { incomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),
@@ -225,7 +225,7 @@ describe("Find Many By Category Id Use Case", () => {
             categoryId: secondCategory.id
         });
 
-        const { incomes } = await findManyByCategoryIdUseCase.execute({
+        const { incomes } = await findManyIncomesByCategoryIdUseCase.execute({
             userId: user.id,
             categoryId: secondCategory.id,
             startDate: new Date(2026, 7, 1),

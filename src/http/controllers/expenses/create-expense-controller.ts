@@ -10,7 +10,7 @@ const createExpenseSchema = z.object({
 });
 
 const createCategoryIdSchema = z.object({
-    categoryId: z.string()
+    categoryId: z.uuid()
 });
 
 export class CreateExpenseController implements Controller {

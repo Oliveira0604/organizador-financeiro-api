@@ -17,7 +17,7 @@ interface FindManyByCategoryIdUseCaseResponse {
     incomes: Income[]
 }
 
-export class FindManyByCategoryIdUseCase {
+export class FindManyIncomesByCategoryIdUseCase {
     constructor(
         private incomeRepository: IncomeRepository,
         private userRepository: UserRepository,
