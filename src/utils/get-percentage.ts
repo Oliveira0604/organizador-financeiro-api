@@ -3,5 +3,5 @@ export function getPercentage(userTotal: number, categoryTotal: number): number 
         return 0;
     }
 
-    return Math.floor((categoryTotal / userTotal) * 100);
+    return Number(((categoryTotal / userTotal) * 100).toFixed(2));
 }
