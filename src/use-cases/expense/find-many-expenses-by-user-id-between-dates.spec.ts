@@ -1,6 +1,6 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-by-user-id-between-dates-use-case";
+import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-expenses-by-user-id-between-dates-use-case";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import type { User } from "@/repositories/user-repository";
 import { InvalidDateError } from "@/errors/invalid-date-error";

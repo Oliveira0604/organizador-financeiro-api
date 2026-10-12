@@ -4,18 +4,18 @@ import type { Expense, ExpenseRepository } from "@/repositories/expense-reposito
 import type { UserRepository } from "@/repositories/user-repository";
 
 
-interface FindManyByUserIdBetweenDatesUseCaseRequest {
+interface FindManyExpensesByUserIdBetweenDatesUseCaseRequest {
     userId: string,
     startDate?: Date,
     endDate?: Date,
     page: number
 }
 
-interface FindManyByUserIdBetweenDatesUseCaseResponse {
+interface FindManyExpensesByUserIdBetweenDatesUseCaseResponse {
     expenses: Expense[]
 }
 
-export class FindManyByUserIdBetweenDatesUseCase {
+export class FindManyExpensesByUserIdBetweenDatesUseCase {
     constructor(
         private expenseRepository: ExpenseRepository,
         private userRepository: UserRepository
@@ -26,7 +26,7 @@ export class FindManyByUserIdBetweenDatesUseCase {
         startDate,
         endDate,
         page
-    }: FindManyByUserIdBetweenDatesUseCaseRequest): Promise<FindManyByUserIdBetweenDatesUseCaseResponse> {
+    }: FindManyExpensesByUserIdBetweenDatesUseCaseRequest): Promise<FindManyExpensesByUserIdBetweenDatesUseCaseResponse> {
 
         const now = new Date();
 

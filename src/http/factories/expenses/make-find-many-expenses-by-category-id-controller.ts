@@ -1,4 +1,4 @@
-import { FindManyExpensesByCategoryIdController } from "@/http/controllers/expenses/find-many-by-category-id-controller";
+import { FindManyExpensesByCategoryIdController } from "@/http/controllers/expenses/find-many-expenses-by-category-id-controller";
 import { PrismaCategoryRepository } from "@/repositories/prisma/prisma-category-repository";
 import { PrismaExpenseRepository } from "@/repositories/prisma/prisma-expense-repository";
 import { PrismaUserRepository } from "@/repositories/prisma/prisma-user-repository";

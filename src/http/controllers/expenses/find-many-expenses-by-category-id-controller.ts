@@ -3,11 +3,11 @@ import type { Controller } from "../controller";
 import type { HttpRequest, HttpResponse } from "../http";
 import z from "zod";
 
-const rangeOfDateSchema = z.object({
+const findManyExpensesSchema = z.object({
     categoryId: z.uuid(),
-    startDate: z.coerce.date(),
-    endDate: z.coerce.date(),
-    page: z.coerce.number()
+    startDate: z.coerce.date().optional(),
+    endDate: z.coerce.date().optional(),
+    page: z.coerce.number().int().min(1)
 });
 
 export class FindManyExpensesByCategoryIdController implements Controller {
@@ -16,14 +16,14 @@ export class FindManyExpensesByCategoryIdController implements Controller {
     ) { }
 
     async handle(request: HttpRequest): Promise<HttpResponse> {
-        const { categoryId, startDate, endDate, page } = rangeOfDateSchema.parse(request.query);
+        const { categoryId, startDate, endDate, page } = findManyExpensesSchema.parse(request.query);
         const userId = request.user!.id;
 
         const { expenses: result } = await this.findManyByCategoryIdUseCase.execute({
             categoryId,
             userId,
-            startDate,
-            endDate,
+            ...(startDate !== undefined && { startDate }),
+            ...(endDate !== undefined && { endDate }),
             page
         });
 
