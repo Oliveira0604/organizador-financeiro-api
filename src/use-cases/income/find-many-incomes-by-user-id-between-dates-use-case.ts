@@ -3,18 +3,18 @@ import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { Income, IncomeRepository } from "@/repositories/income-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 
-interface FindManyByUserIdBetweenDatesUseCaseRequest {
+interface FindManyIncomesByUserIdBetweenDatesUseCaseRequest {
     userId: string,
     startDate?: Date,
     endDate?: Date,
     page: number
 }
 
-interface FindManyByUserIdBetweenDatesUseCaseResponse {
+interface FindManyIncomesByUserIdBetweenDatesUseCaseResponse {
     incomes: Income[]
 }
 
-export class FindManyByUserIdBetweenDatesUseCase {
+export class FindManyIncomesByUserIdBetweenDatesUseCase {
     constructor(
         private incomeRepository: IncomeRepository,
         private userRepository: UserRepository
@@ -25,7 +25,7 @@ export class FindManyByUserIdBetweenDatesUseCase {
         startDate,
         endDate,
         page
-    }: FindManyByUserIdBetweenDatesUseCaseRequest): Promise<FindManyByUserIdBetweenDatesUseCaseResponse> {
+    }: FindManyIncomesByUserIdBetweenDatesUseCaseRequest): Promise<FindManyIncomesByUserIdBetweenDatesUseCaseResponse> {
 
         const now = new Date();
 
