@@ -5,7 +5,7 @@ import type { HttpRequest } from "../http";
 import type { HttpResponse } from "../http";
 
 const createExpenseSchema = z.object({
-    title: z.string(),
+    title: z.string().min(1).trim(),
     amount: z.number().multipleOf(0.01).positive()
 });
 
@@ -33,8 +33,8 @@ export class CreateExpenseController implements Controller {
         return {
             statusCode: 201,
             body: {
-                id: expense.id,
-                name: expense.title
+                title: expense.title,
+                amount: expense.amount
             }
         };
     }

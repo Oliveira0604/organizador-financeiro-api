@@ -8,7 +8,7 @@ import { verifyJWT } from "@/middleware/verify-jwt";
 import { verifyRefreshToken } from "@/middleware/verify-refresh-token";
 import { makeRefreshTokenController } from "@/http/factories/users/make-refresh-token-controller";
 
-export async function userRoutes(app: FastifyInstance) {
+export function userRoutes(app: FastifyInstance) {
     app.post("/users/create", fastifyAdapter(makeCreateUserController()));
     app.post("/users/session", fastifyAdapter(makeAuthenticateUserController()));
     app.patch("/users/token/refresh", { onRequest: verifyRefreshToken }, fastifyAdapter(makeRefreshTokenController()));

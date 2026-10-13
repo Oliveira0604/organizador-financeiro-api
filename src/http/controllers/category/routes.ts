@@ -5,7 +5,7 @@ import { makeUpdateCategoryController } from "@/http/factories/category/make-upd
 import { verifyJWT } from "@/middleware/verify-jwt";
 import type { FastifyInstance } from "fastify";
 
-export async function categoryRoutes(app: FastifyInstance) {
+export function categoryRoutes(app: FastifyInstance) {
     app.addHook("onRequest", verifyJWT);
 
     app.post("/category/create/:id", fastifyAdapter(makeCreateCategoryController()));

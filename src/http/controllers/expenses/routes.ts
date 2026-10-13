@@ -9,7 +9,7 @@ import { makeUpdateExpenseController } from "@/http/factories/expenses/make-upda
 import { verifyJWT } from "@/middleware/verify-jwt";
 import type { FastifyInstance } from "fastify";
 
-export async function expenseRoutes(app: FastifyInstance) {
+export function expenseRoutes(app: FastifyInstance) {
     app.addHook("onRequest", verifyJWT);
 
     app.get("/expenses", fastifyAdapter(makeFindManyByUserIdBetweenDatesController()));

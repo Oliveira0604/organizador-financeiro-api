@@ -31,7 +31,7 @@ model User {
 model Income {
   id         String    @id @default(uuid())
   title      String
-  amount     Decimal
+  amount     Decimal   @db.Decimal(12, 2)
   receivedAt DateTime  @default(now())
   categoryId String
   userId     String
