@@ -1,14 +1,14 @@
 import { InMemoryIncomeRepository } from "@/repositories/in-memory/in-memory-income-repository";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { FindManyIncomesByUserIdBetweenDatesUseCase } from "./find-many-incomes-by-user-id-between-dates-use-case";
+import { FindManyIncomesByUserIdUseCase } from "./find-many-incomes-by-user-id-use-case";
 import type { User } from "@/repositories/user-repository";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let incomeRepository: InMemoryIncomeRepository;
 let userRepository: InMemoryUserRepository;
-let findManyByUserIdBetweenDatesUseCase: FindManyIncomesByUserIdBetweenDatesUseCase;
+let findManyByUserIdBetweenDatesUseCase: FindManyIncomesByUserIdUseCase;
 let startDate: Date;
 let endDate: Date;
 let user: User;
@@ -17,7 +17,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
     beforeEach(async () => {
         incomeRepository = new InMemoryIncomeRepository();
         userRepository = new InMemoryUserRepository();
-        findManyByUserIdBetweenDatesUseCase = new FindManyIncomesByUserIdBetweenDatesUseCase(incomeRepository, userRepository);
+        findManyByUserIdBetweenDatesUseCase = new FindManyIncomesByUserIdUseCase(incomeRepository, userRepository);
         startDate = new Date(2026, 7, 1);
         endDate = new Date(2026, 7, 31);
         vi.useFakeTimers();

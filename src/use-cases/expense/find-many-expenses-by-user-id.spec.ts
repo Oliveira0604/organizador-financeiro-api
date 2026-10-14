@@ -1,13 +1,13 @@
 import { InMemoryExpenseRepository } from "@/repositories/in-memory/in-memory-expense-repository";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { FindManyByUserIdBetweenDatesUseCase } from "./find-many-expenses-by-user-id-between-dates-use-case";
+import { FindManyExpensesByUserIdUseCase } from "./find-many-expenses-by-user-id-use-case";
 import { InMemoryUserRepository } from "@/repositories/in-memory/in-memory-user-repository";
 import type { User } from "@/repositories/user-repository";
 import { InvalidDateError } from "@/errors/invalid-date-error";
 
 let expenseRepository: InMemoryExpenseRepository;
 let userRepository: InMemoryUserRepository;
-let findManyByUserIdBetweenDates: FindManyByUserIdBetweenDatesUseCase;
+let findManyByUserIdBetweenDates: FindManyExpensesByUserIdUseCase;
 let user: User;
 let secondUser: User;
 
@@ -15,7 +15,7 @@ describe("Find Many By User Id Between Dates Use Case", () => {
     beforeEach(async () => {
         expenseRepository = new InMemoryExpenseRepository();
         userRepository = new InMemoryUserRepository();
-        findManyByUserIdBetweenDates = new FindManyByUserIdBetweenDatesUseCase(expenseRepository, userRepository);
+        findManyByUserIdBetweenDates = new FindManyExpensesByUserIdUseCase(expenseRepository, userRepository);
         vi.useFakeTimers();
 
         vi.setSystemTime(new Date(2026, 7, 5));

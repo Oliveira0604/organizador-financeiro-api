@@ -3,7 +3,7 @@ import { InvalidAmountError } from "@/errors/is-amount-valid-error";
 import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { CategoryRepository } from "@/repositories/category-repository";
-import type { ExpenseRepository, UpdateExpenseData } from "@/repositories/expense-repository";
+import type { Expense, ExpenseRepository, UpdateExpenseData } from "@/repositories/expense-repository";
 import { isValidAmount } from "@/utils/is-valid-amount";
 
 interface UpdateExpenseUseCaseRequest {
@@ -15,9 +15,7 @@ interface UpdateExpenseUseCaseRequest {
 }
 
 interface UpdateExpenseUseCaseResponse {
-    title: string
-    amount: number
-    categoryName?: string
+    expense: Expense | null
 }
 
 export class UpdateExpenseUseCase {
@@ -78,9 +76,7 @@ export class UpdateExpenseUseCase {
         );
 
         return {
-            title: updatedExpense!.title,
-            amount: updatedExpense!.amount,
-            ...(categoryName !== undefined && { categoryName })
+            expense: updatedExpense
         };
     }
 }

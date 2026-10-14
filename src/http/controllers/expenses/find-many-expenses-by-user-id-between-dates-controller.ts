@@ -1,5 +1,5 @@
 
-import type { FindManyExpensesByUserIdBetweenDatesUseCase } from "@/use-cases/expense/find-many-expenses-by-user-id-between-dates-use-case";
+import type { FindManyExpensesByUserIdUseCase } from "@/use-cases/expense/find-many-expenses-by-user-id-use-case";
 import type { Controller } from "../controller";
 import type { HttpRequest, HttpResponse } from "../http";
 import z from "zod";
@@ -10,9 +10,9 @@ const findManyExpensesSchema = z.object({
     page: z.coerce.number().int().min(1)
 });
 
-export class FindManyExpensesByUserIdBetweenDatesController implements Controller {
+export class FindManyExpensesByUserIdController implements Controller {
     constructor(
-        private findManyExpensesByUserIdUseCase: FindManyExpensesByUserIdBetweenDatesUseCase
+        private findManyExpensesByUserIdUseCase: FindManyExpensesByUserIdUseCase
     ) { }
 
     async handle(request: HttpRequest): Promise<HttpResponse> {

@@ -23,7 +23,7 @@ export class UpdateExpenseController implements Controller {
         const { title, categoryName, amount } = updateExpenseBodySchema.parse(request.body);
         const userId = request.user!.id;
 
-        const updatedExpense = await this.updateExpenseUseCase.execute({
+        const { expense: updatedExpense } = await this.updateExpenseUseCase.execute({
             id: categoryId,
             userId,
             ...(title !== undefined && { title }),
@@ -33,7 +33,11 @@ export class UpdateExpenseController implements Controller {
 
         return {
             statusCode: 200,
-            body: updatedExpense
+            body: {
+                title: updatedExpense!.title,
+                amount: updatedExpense!.amount,
+                categoryName: categoryName
+            }
         };
     }
 }

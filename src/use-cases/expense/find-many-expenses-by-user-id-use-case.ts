@@ -1,22 +1,23 @@
 import { InvalidDateError } from "@/errors/invalid-date-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
-import type { Income, IncomeRepository } from "@/repositories/income-repository";
+import type { Expense, ExpenseRepository } from "@/repositories/expense-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 
-interface FindManyIncomesByUserIdBetweenDatesUseCaseRequest {
+
+interface FindManyExpensesByUserIdUseCaseRequest {
     userId: string,
     startDate?: Date,
     endDate?: Date,
     page: number
 }
 
-interface FindManyIncomesByUserIdBetweenDatesUseCaseResponse {
-    incomes: Income[]
+interface FindManyExpensesByUserIdUseCaseResponse {
+    expenses: Expense[]
 }
 
-export class FindManyIncomesByUserIdBetweenDatesUseCase {
+export class FindManyExpensesByUserIdUseCase {
     constructor(
-        private incomeRepository: IncomeRepository,
+        private expenseRepository: ExpenseRepository,
         private userRepository: UserRepository
     ) { }
 
@@ -25,7 +26,7 @@ export class FindManyIncomesByUserIdBetweenDatesUseCase {
         startDate,
         endDate,
         page
-    }: FindManyIncomesByUserIdBetweenDatesUseCaseRequest): Promise<FindManyIncomesByUserIdBetweenDatesUseCaseResponse> {
+    }: FindManyExpensesByUserIdUseCaseRequest): Promise<FindManyExpensesByUserIdUseCaseResponse> {
 
         const now = new Date();
 
@@ -42,7 +43,7 @@ export class FindManyIncomesByUserIdBetweenDatesUseCase {
             throw new ResourceNotFoundError();
         }
 
-        const incomes = await this.incomeRepository.findManyByUserIdBetweenDates(
+        const expenses = await this.expenseRepository.findManyByUserIdBetweenDates(
             userId,
             resolvedStartDate,
             resolvedEndDate,
@@ -50,7 +51,7 @@ export class FindManyIncomesByUserIdBetweenDatesUseCase {
         );
 
         return {
-            incomes
+            expenses
         };
     }
 }
