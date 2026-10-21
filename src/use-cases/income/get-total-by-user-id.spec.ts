@@ -170,7 +170,7 @@ describe("Get Total By User Id Use Case", () => {
         expect(total).toEqual(0);
     });
 
-    it("should not include incomes thay is not in the provided range of time", async () => {
+    it("should not include incomes that is not in the provided range of time", async () => {
         vi.setSystemTime(new Date(2026, 8, 5));
 
         await incomeRepository.create({

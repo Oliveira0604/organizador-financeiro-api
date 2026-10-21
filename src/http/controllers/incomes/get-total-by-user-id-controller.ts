@@ -29,5 +29,3 @@ export class GetTotalByUserIdController implements Controller {
         };
     }
 }
-
-//TODO: FINISH THIS CONTROLLER AND CREATE THE OTHERS.
