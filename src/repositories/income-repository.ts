@@ -33,3 +33,5 @@ export interface IncomeRepository {
     update(id: string, data: UpdateIncomeData): Promise<Income | null>
     delete(id: string): Promise<void>
 }
+
+//TODO: CHANGE GETTOTAL FOR GETPERCENTAGE

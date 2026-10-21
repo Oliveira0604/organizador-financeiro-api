@@ -127,10 +127,10 @@ export class PrismaIncomeRepository implements IncomeRepository {
         return totalIncome._sum.amount?.toNumber() ?? 0;
     }
 
-    async getTotalByUserId(id: string, startDate: Date, endDate: Date) {
+    async getTotalByUserId(userId: string, startDate: Date, endDate: Date) {
         const total = await prisma.income.aggregate({
             where: {
-                id,
+                userId,
                 receivedAt: {
                     gte: startDate,
                     lte: endDate
