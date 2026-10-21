@@ -30,12 +30,12 @@ describe("Get Total By User Id Use Case", () => {
 
         const firstCategory = await categoryRepository.create({
             name: "supermarket",
-            userId: "user-01"
+            userId: user.id
         });
 
         const secondCategory = await categoryRepository.create({
             name: "house bills",
-            userId: "user-01"
+            userId: user.id
         });
 
         vi.setSystemTime(new Date(2026, 9, 1));
@@ -185,7 +185,7 @@ describe("Get Total By User Id Use Case", () => {
         expect(secondUserTotal).toEqual(1100);
     });
 
-    it("should not include expenses that are not in the providaded range of date", async () => {
+    it("should not include expenses that are not in the provided range of date", async () => {
         const { total } = await getTotalByUserIdUseCase.execute({
             userId: user.id,
             requesterId: user.id,

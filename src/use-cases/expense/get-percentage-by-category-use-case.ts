@@ -5,6 +5,7 @@ import type { CategoryRepository } from "@/repositories/category-repository";
 import type { ExpenseRepository } from "@/repositories/expense-repository";
 import type { UserRepository } from "@/repositories/user-repository";
 import { getPercentage } from "@/utils/get-percentage";
+import { resolveDate } from "@/utils/resolve-date";
 
 interface GetPercetageByCategoryUseCaseRequest {
     userId: string,
@@ -31,15 +32,7 @@ export class GetPercentageByCategoryUseCase {
         endDate
     }: GetPercetageByCategoryUseCaseRequest): Promise<GetPercetageByCategoryUseCaseResponse> {
 
-        const now = new Date();
-
-        const resolvedStartDate = startDate
-            ? new Date(startDate.setHours(0, 0, 0, 0))
-            : new Date(now.getFullYear(), now.getMonth(), 1);
-        const resolvedEndDate = endDate
-            ? new Date(endDate.setHours(23, 59, 59, 999))
-            : new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-
+        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
 
         if (resolvedStartDate > resolvedEndDate) {
             throw new InvalidDateError();

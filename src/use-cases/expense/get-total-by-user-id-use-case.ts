@@ -3,6 +3,7 @@ import { NotAllowedError } from "@/errors/not-allowed-error";
 import { ResourceNotFoundError } from "@/errors/resource-not-found-error";
 import type { ExpenseRepository } from "@/repositories/expense-repository";
 import type { UserRepository } from "@/repositories/user-repository";
+import { resolveDate } from "@/utils/resolve-date";
 
 interface GetTotalByUserIdUseCaseRequest {
     userId: string
@@ -37,14 +38,7 @@ export class GetTotalByUserIdUseCase {
             throw new NotAllowedError();
         }
 
-        const now = new Date();
-        const resolvedStartDate = startDate
-            ? new Date(startDate.setHours(0, 0, 0, 0))
-            : new Date(now.getFullYear(), now.getMonth(), 1);
-        const resolvedEndDate = endDate
-            ? new Date(endDate.setHours(23, 59, 59, 999))
-            : new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
-
+        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
 
         if (resolvedStartDate > resolvedEndDate) {
             throw new InvalidDateError();
