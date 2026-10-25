@@ -31,12 +31,6 @@ export class GetTotalByCategoryIdUseCase {
         endDate
     }: GetTotalByCategoryIdUseCaseRequest): Promise<GetTotalByCategoryIdUseCaseResponse> {
 
-        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
-
-        if (resolvedStartDate > resolvedEndDate) {
-            throw new InvalidDateError();
-        }
-
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
@@ -51,6 +45,12 @@ export class GetTotalByCategoryIdUseCase {
 
         if (category.userId !== userId) {
             throw new NotAllowedError();
+        }
+
+        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
+
+        if (resolvedStartDate > resolvedEndDate) {
+            throw new InvalidDateError();
         }
 
         const total = await this.incomeRepository.getTotalByCategoryId(

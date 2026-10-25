@@ -32,12 +32,6 @@ export class GetPercentageByCategoryUseCase {
         endDate
     }: GetPercetageByCategoryUseCaseRequest): Promise<GetPercetageByCategoryUseCaseResponse> {
 
-        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
-
-        if (resolvedStartDate > resolvedEndDate) {
-            throw new InvalidDateError();
-        }
-
         const user = await this.userRepository.findById(userId);
 
         if (!user) {
@@ -52,6 +46,12 @@ export class GetPercentageByCategoryUseCase {
 
         if (category.userId !== user.id) {
             throw new NotAllowedError();
+        }
+
+        const { resolvedStartDate, resolvedEndDate } = resolveDate(startDate, endDate);
+
+        if (resolvedStartDate > resolvedEndDate) {
+            throw new InvalidDateError();
         }
 
         const categoryTotal = await this.expenseRepository.getTotalByCategoryId(
