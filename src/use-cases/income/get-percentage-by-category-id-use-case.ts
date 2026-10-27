@@ -45,7 +45,6 @@ export class GetPercentageByCategoryIdUseCase {
             throw new InvalidDateError();
         }
 
-        console.time("Sequencial");
         const categoryTotal = await this.incomeRepository.getTotalByCategoryId(
             userId,
             category.id,
@@ -58,7 +57,6 @@ export class GetPercentageByCategoryIdUseCase {
             resolvedStartDate,
             resolvedEndDate
         );
-        console.timeEnd("Sequencial");
 
         const percentage = getPercentage(
             userTotal,
