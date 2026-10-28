@@ -63,6 +63,24 @@ src/
 ├── app.ts             # Configuração da aplicação
 └── server.ts          # Inicialização do servidor
 
+## Endpoints
+
+### Usuários
+| Método | Rota | Descrição | Auth
+
+| POST   | "/users/create"        | Cria um usuário                   | Não
+| POST   | "/users/session"       | Inicia uma sessão                 | Não
+| PATCH  | "/users/token/refresh" | Renova o access token             | Não 
+| PATCH  | "/users/update/:id"    | Atualiza informações dos usuarios | Sim
+| DELETE | "/users/delete/:id"    | Faz o soft delete de um usuário   | Sim
+
+### Categorias
+| Método | Rota | Descrição | Auth
+
+| POST   | "/category/create/"            | Cria uma categoria                 | Sim
+| PATCH  | "/category/update/:categoryId" | Atualiza uma categoria             | Sim
+| DELETE | "/category/delete/:categoryId" | Faz o soft delete em uma categoria | Sim
+
 ## Autenticação
 
 A API utiliza JWT para autenticação.
