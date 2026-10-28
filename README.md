@@ -1,7 +1,6 @@
 # Organizador Financeiro
 
-API REST para gerenciamento financeiro pessoal, desenvolvida com Node.js e TypeScript, com autenticação JWT, PostgreSQL, Prisma, validação de dados, regras de negócio e testes automatizados.
-
+API REST para gerenciamento financeiro pessoal, permitindo controlar usuários, rendas, despesas e categorias, além de consultar gastos por período e calcular a representatividade das despesas.
 
 ## Sobre o projeto
 
@@ -9,6 +8,20 @@ Projeto pessoal desenvolvido para praticar desenvolvimento backend
 com Node.js e TypeScript, aplicando uma arquitetura em camadas
 inspirada em Clean Architecture, separação de responsabilidades
 e testes automatizados.
+
+## Funcionalidades
+
+- Cadastro, atualização e remoção de usuários
+- Autenticação com JWT
+- Cadastro, atualização e remoção de rendas
+- Cadastro, atualização e remoção de despesas
+- Criação e gerenciamento de categorias
+- Consulta de despesas por período
+- Cálculo da porcentagem de cada categoria no total de despesas
+- Controle de acesso por usuário
+- Validação de dados
+- Tratamento de erros
+- Testes automatizados
 
 ## Tecnologias
 
@@ -30,6 +43,39 @@ O projeto segue uma arquitetura em camadas, com separação entre controllers, u
 - Os **repositories** são responsáveis pela abstração de acesso aos dados, permitindo trocar a implementação (ex: Prisma, in-memory) sem impactar as demais camadas.
 - As **factories** são responsáveis por montar e injetar as dependências de cada controller (repository → use case → controller).
 
+## Estrutura do projeto
+
+A aplicação é organizada por responsabilidades, mantendo a separação entre a camada HTTP, regras de negócio e acesso aos dados
+
+src/
+├── adapters/          # Responsável por adaptar a comunicação entre o Fastify e os controllers
+├── cryptography/      # Responsável pelas operações criptográficas, como gerar e comparar hashes de senhas usando bcrypt.
+├── env/               # Responsável por fazer a validação das variáveis de ambiente da aplicação
+├── errors/            # Erros customizados da aplicação
+├── generated/         # Código gerado pelo Prisma
+├── http/              # Resposável pela camada HTTP, incluindo controllers, factories e definição das rotas
+├── lib/               # Configurações e inicialização de recursos compartilhados, como o Prisma.
+├── middleware/        # Responsável pela verificação do token JWT e do refresh token. 
+├── repositories/      # Interfaces e implementações de acesso aos dados
+├── tokens/            # Responsável por gerar os tokens JWT.
+├── use-cases/         # Regras de negócio da aplicação
+├── utils/             # Funções auxiliares
+├── app.ts             # Configuração da aplicação
+└── server.ts          # Inicialização do servidor
+
+## Autenticação
+
+A API utiliza JWT para autenticação.
+
+Após realizar o login, o usuário recebe um access token e um refresh token.
+
+O access token deve ser enviado nas rotas protegidas através do header:
+
+Authorization: Bearer <access_token>
+
+Quando o access token expira, o refresh token pode ser utilizado
+para obter um novo access token através da rota `/users/token/refresh`.
+
 ## RFs 
 - [x] O sistema deve ser capaz de cadastrar um usuário
 - [x] O sistema deve ser capaz de atualizar dados de um usuário
@@ -43,9 +89,7 @@ O projeto segue uma arquitetura em camadas, com separação entre controllers, u
 - [x] O sistema deve ser capaz de categorizar as despesas
 - [x] O sistema deve ser capaz de mostrar os gastos até o período da solicitação
 - [x] O sistema deve ser capaz de mostrar a porcentagem que cada despesa representa
-- [ ] O sistema deve ser capaz de simular rendimento de um dinheiro investido à renda fixa
 - [x] O sistema deve permitir consultar as despesas de um mês específico.
-- [ ] O sistema deve ser capaz de mostrar um resumo financeiro mensal.
 
 ## RNs
 - [x] O usuário não pode se cadastrar com um email já existente
@@ -58,6 +102,6 @@ O projeto segue uma arquitetura em camadas, com separação entre controllers, u
 ## RNFs 
 - [x] A senha do usuário deve estar criptografada
 - [x] Os dados devem ser persistido em PostgreSQL
-- [ ] Os gastos devem estar paginados
-- [ ] As despesas devem estar paginados
+- [x] Os gastos devem estar paginados
+- [x] As despesas devem estar paginados
 - [x] A autenticação deve utilizar JWT

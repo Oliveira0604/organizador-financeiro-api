@@ -1,5 +1,6 @@
 import { fastifyAdapter } from "@/adapters/fastify-adapter";
 import { makeCreateIncomeController } from "@/http/factories/incomes/make-create-income-controller";
+import { makeDeleteIncomeController } from "@/http/factories/incomes/make-delete-income-controller";
 import { makeFindManyIncomesByCategoryIdController } from "@/http/factories/incomes/make-find-many-incomes-by-category-id-controller";
 import { makeFindManyIncomesByUserIdController } from "@/http/factories/incomes/make-find-many-incomes-by-user-id-controller";
 import { makeGetPercentageByCategoryIdController } from "@/http/factories/incomes/make-get-percentage-by-category-id-controller";
@@ -19,4 +20,5 @@ export function incomesRoutes(app: FastifyInstance) {
     app.get("/incomes/category/percentage", fastifyAdapter(makeGetPercentageByCategoryIdController()));
     app.post("/incomes/create", fastifyAdapter(makeCreateIncomeController()));
     app.patch("/incomes/update", fastifyAdapter(makeUpdateIncomeController()));
+    app.delete("/incomes/delete", fastifyAdapter(makeDeleteIncomeController()));
 }

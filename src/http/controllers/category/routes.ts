@@ -8,7 +8,7 @@ import type { FastifyInstance } from "fastify";
 export function categoryRoutes(app: FastifyInstance) {
     app.addHook("onRequest", verifyJWT);
 
-    app.post("/category/create/:id", fastifyAdapter(makeCreateCategoryController()));
-    app.patch("/category/update/:id", fastifyAdapter(makeUpdateCategoryController()));
-    app.delete("/category/delete/:id", fastifyAdapter(makeDeleteCategoryController()));
+    app.post("/category/create", fastifyAdapter(makeCreateCategoryController()));
+    app.patch("/category/update/:categoryId", fastifyAdapter(makeUpdateCategoryController()));
+    app.delete("/category/delete/categoryId", fastifyAdapter(makeDeleteCategoryController()));
 }
