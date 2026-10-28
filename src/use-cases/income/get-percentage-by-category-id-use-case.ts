@@ -68,4 +68,3 @@ export class GetPercentageByCategoryIdUseCase {
         };
     }
 }
-//TODO: Finish this use case and make the test

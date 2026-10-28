@@ -5,6 +5,7 @@ import { makeFindManyIncomesByUserIdController } from "@/http/factories/incomes/
 import { makeGetPercentageByCategoryIdController } from "@/http/factories/incomes/make-get-percentage-by-category-id-controller";
 import { makeGetTotalByCategoryIdController } from "@/http/factories/incomes/make-get-total-by-category-id-controller";
 import { makeGetTotalByUserIdController } from "@/http/factories/incomes/make-get-total-by-user-id-controller";
+import { makeUpdateIncomeController } from "@/http/factories/incomes/make-update-income-controller";
 import { verifyJWT } from "@/middleware/verify-jwt";
 import type { FastifyInstance } from "fastify";
 
@@ -17,4 +18,5 @@ export function incomesRoutes(app: FastifyInstance) {
     app.get("/incomes/user/total", fastifyAdapter(makeGetTotalByUserIdController()));
     app.get("/incomes/category/percentage", fastifyAdapter(makeGetPercentageByCategoryIdController()));
     app.post("/incomes/create", fastifyAdapter(makeCreateIncomeController()));
+    app.patch("/incomes/update", fastifyAdapter(makeUpdateIncomeController()));
 }
