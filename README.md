@@ -46,7 +46,7 @@ O projeto segue uma arquitetura em camadas, com separação entre controllers, u
 ## Estrutura do projeto
 
 A aplicação é organizada por responsabilidades, mantendo a separação entre a camada HTTP, regras de negócio e acesso aos dados
-
+```
 src/
 ├── adapters/          # Responsável por adaptar a comunicação entre o Fastify e os controllers
 ├── cryptography/      # Responsável pelas operações criptográficas, como gerar e comparar hashes de senhas usando bcrypt.
@@ -62,7 +62,7 @@ src/
 ├── utils/             # Funções auxiliares
 ├── app.ts             # Configuração da aplicação
 └── server.ts          # Inicialização do servidor
-
+```
 ## Autenticação
 
 A API utiliza JWT para autenticação.
