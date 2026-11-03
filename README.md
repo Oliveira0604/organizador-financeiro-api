@@ -79,7 +79,7 @@ para obter um novo access token através da rota `/users/token/refresh`.
 ## Endpoints
 
 ```
-### Usuários
+Usuários
 | Método | Rota                            | Descrição                                              | Auth
 
 | POST   | "/users/create"                 | Cria um usuário                                        | Não
@@ -88,14 +88,14 @@ para obter um novo access token através da rota `/users/token/refresh`.
 | PATCH  | "/users/update/:id"             | Atualiza informações dos usuarios                      | Sim
 | DELETE | "/users/delete/:id"             | Faz o soft delete de um usuário                        | Sim
 
-### Categorias
+Categorias
 | Método | Rota                            | Descrição                                              | Auth
 
 | POST   | "/category/create/"             | Cria uma categoria                                     | Sim
 | PATCH  | "/category/update/:categoryId"  | Atualiza uma categoria                                 | Sim
 | DELETE | "/category/delete/:categoryId"  | Faz o soft delete em uma categoria                     | Sim
 
-## Incomes
+Incomes
 | Método | Rota                            | Descrição                                               | Auth
 
 | GET    | "/incomes/categoryid"           | Retorna o nome, quantia e quando uma renda foi recebida | Sim
@@ -107,7 +107,7 @@ para obter um novo access token através da rota `/users/token/refresh`.
 | PATCH  | "/incomes/update"               | Atualiza uma ou mais informação sobre a renda           | Sim
 | DELETE | "/incomes/delete"               | Faz o soft delete de uma renda                          | Sim
 
-## Expenses 
+Expenses 
 | Método | Rota                             | Descrição                                               | Auth
 
 | GET    | "/expenses"                      | Retorna as despesas do usuário                          | Sim
