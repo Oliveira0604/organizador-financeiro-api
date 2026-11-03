@@ -78,6 +78,7 @@ para obter um novo access token através da rota `/users/token/refresh`.
 
 ## Endpoints
 
+```
 ### Usuários
 | Método | Rota                            | Descrição                                              | Auth
 
@@ -115,7 +116,8 @@ para obter um novo access token através da rota `/users/token/refresh`.
 | GET    | "/expenses/category/total"       | Retorna o total de uma categoria                        | Sim
 | POST   | "/expenses/create/"              | Cria uma despesa                                        | Sim
 | PATCH  | "/expenses/update"               | Atualiza uma ou mais informação sobre a despesa         | Sim
-| DELETE | "/expenses/delete"               | Faz o soft delete de uma despesa                          | Sim
+| DELETE | "/expenses/delete"               | Faz o soft delete de uma despesa                        | Sim
+```
 
 ## Decisões técnicas
 
@@ -129,6 +131,10 @@ Prisma e in-memory, facilitando os testes e reduzindo o acoplamento.
 
 As regras de negócio ficam concentradas nos use cases, mantendo os
 controllers focados na comunicação HTTP.
+
+### Controllers
+
+Os controllers são responsáveis por receber e tratar as requisições HTTP, validar os dados de entrada utilizando Zod e encaminhar as informações para os respectivos use cases. Dessa forma, permanecem independentes das regras de negócio e dos detalhes de persistência.
 
 ### Validação
 
