@@ -16,7 +16,7 @@ export function expenseRoutes(app: FastifyInstance) {
     app.get("/expenses/category", fastifyAdapter(makeFindManyExpensesByCategoryIdController()));
     app.get("/expenses/category/percentage", fastifyAdapter(makeGetPercentageByCategoryController()));
     app.get("/expenses/category/total", fastifyAdapter(makeGetTotalByCategoryIdController()));
-    app.post("/expenses/create/:categoryId", fastifyAdapter(makeCreateExpenseController()));
+    app.post("/expenses/create", fastifyAdapter(makeCreateExpenseController()));
     app.patch("/expenses/update", fastifyAdapter(makeUpdateExpenseController()));
     app.delete("/expenses/delete", fastifyAdapter(makeDeleteExpenseController()));
 }

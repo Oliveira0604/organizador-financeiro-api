@@ -63,24 +63,6 @@ src/
 ├── app.ts             # Configuração da aplicação
 └── server.ts          # Inicialização do servidor
 
-## Endpoints
-
-### Usuários
-| Método | Rota | Descrição | Auth
-
-| POST   | "/users/create"        | Cria um usuário                   | Não
-| POST   | "/users/session"       | Inicia uma sessão                 | Não
-| PATCH  | "/users/token/refresh" | Renova o access token             | Não 
-| PATCH  | "/users/update/:id"    | Atualiza informações dos usuarios | Sim
-| DELETE | "/users/delete/:id"    | Faz o soft delete de um usuário   | Sim
-
-### Categorias
-| Método | Rota | Descrição | Auth
-
-| POST   | "/category/create/"            | Cria uma categoria                 | Sim
-| PATCH  | "/category/update/:categoryId" | Atualiza uma categoria             | Sim
-| DELETE | "/category/delete/:categoryId" | Faz o soft delete em uma categoria | Sim
-
 ## Autenticação
 
 A API utiliza JWT para autenticação.
@@ -93,6 +75,129 @@ Authorization: Bearer <access_token>
 
 Quando o access token expira, o refresh token pode ser utilizado
 para obter um novo access token através da rota `/users/token/refresh`.
+
+## Endpoints
+
+### Usuários
+| Método | Rota                            | Descrição                                              | Auth
+
+| POST   | "/users/create"                 | Cria um usuário                                        | Não
+| POST   | "/users/session"                | Inicia uma sessão                                      | Não
+| PATCH  | "/users/token/refresh"          | Renova o access token                                  | Não 
+| PATCH  | "/users/update/:id"             | Atualiza informações dos usuarios                      | Sim
+| DELETE | "/users/delete/:id"             | Faz o soft delete de um usuário                        | Sim
+
+### Categorias
+| Método | Rota                            | Descrição                                              | Auth
+
+| POST   | "/category/create/"             | Cria uma categoria                                     | Sim
+| PATCH  | "/category/update/:categoryId"  | Atualiza uma categoria                                 | Sim
+| DELETE | "/category/delete/:categoryId"  | Faz o soft delete em uma categoria                     | Sim
+
+## Incomes
+| Método | Rota                            | Descrição                                               | Auth
+
+| GET    | "/incomes/categoryid"           | Retorna o nome, quantia e quando uma renda foi recebida | Sim
+| GET    | "/incomes/userid"               | Retorna as rendas do usuario                            | Sim
+| GET    | "/incomes/category/total"       | Retorna a quantidade total de uma categoria             | Sim
+| GET    | "/incomes/user/total"           | Retorna a quantidade total do usuario                   | Sim
+| GET    | "/incomes/category/percentage"  | Retorna a porcentagem total de uma categoria            | Sim
+| POST   | "/incomes/create"               | Cria uma renda nova                                     | Sim
+| PATCH  | "/incomes/update"               | Atualiza uma ou mais informação sobre a renda           | Sim
+| DELETE | "/incomes/delete"               | Faz o soft delete de uma renda                          | Sim
+
+## Expenses 
+| Método | Rota                             | Descrição                                               | Auth
+
+| GET    | "/expenses"                      | Retorna as despesas do usuário                          | Sim
+| GET    | "/expenses/category"             | Retorna as despesas de uma categoria                    | Sim
+| GET    | "/expenses/category/percentage"  | Retorna a porcentagem de uma categoria                  | Sim
+| GET    | "/expenses/category/total"       | Retorna o total de uma categoria                        | Sim
+| POST   | "/expenses/create/"              | Cria uma despesa                                        | Sim
+| PATCH  | "/expenses/update"               | Atualiza uma ou mais informação sobre a despesa         | Sim
+| DELETE | "/expenses/delete"               | Faz o soft delete de uma despesa                          | Sim
+
+## Decisões técnicas
+
+### Repositories
+
+As interfaces de repository são independentes da implementação de
+persistência. Isso permite utilizar implementações diferentes, como
+Prisma e in-memory, facilitando os testes e reduzindo o acoplamento.
+
+### Use Cases
+
+As regras de negócio ficam concentradas nos use cases, mantendo os
+controllers focados na comunicação HTTP.
+
+### Validação
+
+Os dados recebidos pela API são validados utilizando Zod antes de
+serem encaminhados aos use cases.
+
+
+## Como executar o projeto
+
+### Pré-requisitos
+
+Antes de começar, certifique-se de ter instalado:
+
+- [Node.js](https://nodejs.org/)
+- [Docker](https://www.docker.com/)
+- [Git](https://git-scm.com/)
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/Oliveira0604/organizador-financeiro-api
+```
+
+Entre na pasta do projeto:
+
+```bash
+cd organizador-financeiro-api
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+```
+
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` na raiz do projeto e configure as variáveis necessárias:
+
+```env
+DATABASE_URL="postgresql://..."
+JWT_SECRET="seu-segredo"
+```
+
+Consulte as variáveis utilizadas no projeto para preencher os valores corretamente.
+
+### 4. Inicie o banco de dados
+
+Com o Docker instalado e em execução, utilize:
+
+```bash
+docker compose up -d
+```
+
+### 5. Execute as migrations
+
+Para criar as tabelas no banco de dados:
+
+```bash
+npx prisma migrate dev
+```
+
+### 6. Inicie a aplicação
+
+```bash
+npm run start:dev
+```
+
+A aplicação estará disponível localmente conforme a porta configurada no projeto.
 
 ## RFs 
 - [x] O sistema deve ser capaz de cadastrar um usuário
